@@ -3,10 +3,11 @@ UNC Chapel Hill department of Data Science Solve-a-thon team The "Soup"er Solver
 
 ## Run the website
 
+Open app.py and change the port at line 4 to where your device is NOT currently running a different page
 From this directory, run:
 
 ```bash
 python3 app.py
 ```
 
-Then open <http://localhost:8000> in a browser. Stop the server with `Ctrl+C`.
+Then open <http://localhost:<8000>> or whatever location you switched to, in a browser. Stop the server with `Ctrl+C`.
