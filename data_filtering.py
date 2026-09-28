@@ -166,7 +166,7 @@ def filter_grants(input_csv, output_csv, profile):
     filtered = df[mask]
 
     """ export filtered dataset """
-    # filtered.to_csv(output_csv, index=False)
+    filtered.to_csv(output_csv, index=False)
 
     print(f"\nApplicant profile matched codes: {sorted(eligible_codes)}")
     print(f"Total opportunities in input:    {len(df)}")
