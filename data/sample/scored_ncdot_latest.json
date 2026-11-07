@@ -1,0 +1,248 @@
+{
+  "account_id": "ncdot",
+  "generated_at": "2026-11-07T05:00:00Z",
+  "mode": "keyword_fallback",
+  "profile_review_status": "ai-draft",
+  "items": [
+    {
+      "id": "FHWA-2026-SS4A-001",
+      "rank": 1,
+      "title": "Safe Streets and Roads for All (SS4A) — FY 2026 Action Plan Grants",
+      "funder": "Federal Highway Administration (FHWA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/354892",
+      "status": "posted",
+      "close_date": "2026-12-15",
+      "posted_date": "2026-10-01",
+      "score": 91,
+      "confidence": "High",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 38,
+        "eligibility": 15,
+        "timing": 9,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G1-O1", "T5", "T2"],
+      "effort": {
+        "level": "Medium",
+        "hours_est": 80,
+        "notes": "Action Plan grant — NCDOT or MPO-level application. Standard SF-424 + narrative."
+      },
+      "summary": "Funds development and implementation of comprehensive safety action plans (Action Plans) to significantly reduce or eliminate transportation-related fatalities and serious injuries on all public roads. Eligible applicants include states, MPOs, and local governments. NCDOT has existing Vision Zero alignment. FY2026 appropriation ~$1.37B total; individual grants $200K–$25M.",
+      "eligibility_note": "State DOTs, MPOs, and local governments are all eligible. NCDOT qualifies directly.",
+      "risk_note": "Competitive — over 1,000 applicants in FY2024. Projects with strong equity and data components score higher. AI-draft: verify award amounts and deadline.",
+      "source_text": "Safe Streets and Roads for All Grant Program. CFDA 20.939. Federal share up to 80%. Match: 20% non-federal. Eligible activities: Action Plan development, infrastructure projects identified in an Action Plan."
+    },
+    {
+      "id": "FTA-2026-CRISI-002",
+      "rank": 2,
+      "title": "Consolidated Rail Infrastructure and Safety Improvements (CRISI) Program",
+      "funder": "Federal Railroad Administration (FRA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/355100",
+      "status": "posted",
+      "close_date": "2026-12-01",
+      "posted_date": "2026-09-15",
+      "score": 83,
+      "confidence": "High",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 32,
+        "eligibility": 14,
+        "timing": 8,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G3-O2", "G4-O1"],
+      "effort": {
+        "level": "High",
+        "hours_est": 160,
+        "notes": "Complex technical narrative, benefit-cost analysis required."
+      },
+      "summary": "Funds projects that improve the safety, efficiency, and reliability of intercity passenger and freight rail. Eligible activities include highway-rail grade crossing improvements, rail line relocation, positive train control. NCDOT Rail Division manages NC's passenger rail corridors and has active Amtrak partnerships.",
+      "eligibility_note": "State DOTs are eligible applicants. Must partner with Class I or passenger rail operator in most cases.",
+      "risk_note": "NCDOT Rail Division has prior CRISI awards. Good track record. Requires dedicated project management. AI-draft: verify FY2026 NOFO details.",
+      "source_text": "CRISI Program. CFDA 20.325. Federal share up to 80% (90% for certain safety projects). Minimum request: $1M. Benefit-cost analysis required for awards >$5M."
+    },
+    {
+      "id": "FHWA-2026-HSIP-003",
+      "rank": 3,
+      "title": "Highway Safety Improvement Program (HSIP) — Systemic Safety",
+      "funder": "Federal Highway Administration (FHWA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/356001",
+      "status": "posted",
+      "close_date": null,
+      "posted_date": "2026-10-10",
+      "score": 79,
+      "confidence": "High",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 30,
+        "eligibility": 15,
+        "timing": 5,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G1-O1", "T5"],
+      "effort": {
+        "level": "Low",
+        "hours_est": 30,
+        "notes": "Formula program — NCDOT receives funds automatically. Application effort is for specific project selection reporting."
+      },
+      "summary": "Federal formula funding for safety projects on all public roads. NCDOT allocates HSIP funds to high-risk locations statewide. Systemic application targets low-cost countermeasures at many sites (rumble strips, edge lines, signing). No competitive application required; NCDOT receives annual formula allocation.",
+      "eligibility_note": "State DOTs receive formula allocation directly. NCDOT already participates.",
+      "risk_note": "Formula program — not competitive. Main effort is project selection and reporting. AI-draft: verify FY2026 NC allocation amount.",
+      "source_text": "HSIP. CFDA 20.205. 90% federal / 10% state match. NC FY2025 allocation ~$118M. Annual HSIP report required."
+    },
+    {
+      "id": "FTA-2026-5311-004",
+      "rank": 4,
+      "title": "Formula Grants for Rural Areas (Section 5311)",
+      "funder": "Federal Transit Administration (FTA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/356210",
+      "status": "posted",
+      "close_date": null,
+      "posted_date": "2026-10-15",
+      "score": 74,
+      "confidence": "High",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 28,
+        "eligibility": 14,
+        "timing": 5,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G3-O2", "T2", "T6"],
+      "effort": {
+        "level": "Low",
+        "hours_est": 20,
+        "notes": "Formula program. NCDOT PTAD manages rural transit. Annual grant application to FTA."
+      },
+      "summary": "Formula funding for public transportation in rural areas (populations under 50,000). Funds operating assistance, capital, planning, and job access. NCDOT Public Transportation Division (PTAD) administers 5311 funds and passes through to rural transit systems across NC's 100 counties.",
+      "eligibility_note": "State DOTs are the designated recipients. NCDOT is already the designated recipient for NC.",
+      "risk_note": "Formula — not competitive. NCDOT is already the recipient. Main task is annual state management plan update. AI-draft: confirm FY2026 NC apportionment.",
+      "source_text": "FTA Section 5311. CFDA 20.509. 50% federal operating / 80% federal capital. NC apportionment approx. $60M annually."
+    },
+    {
+      "id": "DOT-2026-RAISE-005",
+      "rank": 5,
+      "title": "RAISE Discretionary Grants — FY 2026",
+      "funder": "US Department of Transportation (OST)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/357000",
+      "status": "posted",
+      "close_date": "2026-11-25",
+      "posted_date": "2026-09-20",
+      "score": 71,
+      "confidence": "Medium",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 25,
+        "eligibility": 13,
+        "timing": 8,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G2-O2", "G3-O2", "T2"],
+      "effort": {
+        "level": "High",
+        "hours_est": 200,
+        "notes": "Highly competitive. Requires full benefit-cost analysis, robust equity plan, letters of support."
+      },
+      "summary": "Competitive discretionary grants for surface transportation projects of local/regional significance. Funds planning and capital projects. FY2026 appropriation ~$1.5B; typical award $5M–$25M. Projects must demonstrate safety, environmental sustainability, quality of life, and economic competitiveness benefits. Deadline approaching.",
+      "eligibility_note": "State DOTs, MPOs, local governments, and tribal governments. NCDOT eligible; also can support MPO/local applicants.",
+      "risk_note": "Very competitive (10–15% award rate). Strong projects have multimodal, equity, and economic components. Deadline Nov 25 is urgent. AI-draft: confirm FY2026 NOFO.",
+      "source_text": "RAISE (Rebuilding American Infrastructure with Sustainability and Equity). CFDA 20.933. Max federal share 80%. Min request $1M for rural, $5M for urban."
+    },
+    {
+      "id": "EPA-2026-PROTECT-006",
+      "rank": 6,
+      "title": "PROTECT Formula Program — Climate Resilience for Transportation",
+      "funder": "Federal Highway Administration (FHWA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/357200",
+      "status": "posted",
+      "close_date": null,
+      "posted_date": "2026-10-05",
+      "score": 65,
+      "confidence": "Medium",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 23,
+        "eligibility": 12,
+        "timing": 5,
+        "funder_affinity": 5
+      },
+      "matched_units": ["T1", "G2-O1"],
+      "effort": {
+        "level": "Medium",
+        "hours_est": 60,
+        "notes": "Formula component requires state plan. Competitive component requires project application."
+      },
+      "summary": "Funds projects to improve the resilience of surface transportation infrastructure to natural hazards including climate change, sea level rise, flooding, extreme weather events, and other natural disasters. NC has significant flood and hurricane exposure. NCDOT has active resilience programs.",
+      "eligibility_note": "State DOTs receive formula allocation. Competitive grants open to states, MPOs, and locals.",
+      "risk_note": "PROTECT is relatively new (IIJA). NC allocation established. Competitive component is growing. AI-draft: verify NC FY2026 formula amount.",
+      "source_text": "PROTECT Program. CFDA 20.205 (formula) / 20.XXX (competitive). Federal share up to 80%. Focus on climate vulnerability assessments, resilience improvements, and evacuation routes."
+    },
+    {
+      "id": "DOT-2026-ATCMTD-007",
+      "rank": 7,
+      "title": "Advanced Transportation and Congestion Management Technologies Deployment (ATCMTD)",
+      "funder": "Federal Highway Administration (FHWA)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/357400",
+      "status": "forecasted",
+      "close_date": "2027-02-01",
+      "posted_date": null,
+      "score": 58,
+      "confidence": "Medium",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 21,
+        "eligibility": 11,
+        "timing": 4,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G3-O1", "G3-O3", "T3"],
+      "effort": {
+        "level": "High",
+        "hours_est": 150,
+        "notes": "Technical narrative heavy. Requires technology deployment plan and performance metrics."
+      },
+      "summary": "Funds deployment of advanced technologies to reduce congestion, improve safety, and increase efficiency of transportation networks. Eligible technologies: connected/automated vehicles, smart signals, integrated corridor management, traveler information systems, freight data systems. Forecasted for FY2027 NOFO.",
+      "eligibility_note": "State DOTs, MPOs, and local governments. NCDOT Smart Mobility Division active.",
+      "risk_note": "Forecasted — NOFO not yet posted. FY2026 deadline passed; FY2027 application expected Feb 2027. AI-draft.",
+      "source_text": "ATCMTD Program. CFDA 20.526. Up to $12M per award. 50% federal / 50% non-federal match. Focus on deployment (not research), performance measurement required."
+    },
+    {
+      "id": "DOT-2026-INFRA-008",
+      "rank": 8,
+      "title": "Infrastructure for Rebuilding America (INFRA) — FY 2026",
+      "funder": "US Department of Transportation (OST)",
+      "agency_code": "DOT",
+      "url": "https://www.grants.gov/search-results-detail/358000",
+      "status": "forecasted",
+      "close_date": "2027-01-15",
+      "posted_date": null,
+      "score": 51,
+      "confidence": "Low",
+      "score_breakdown": {
+        "semantic": 0,
+        "keyword": 18,
+        "eligibility": 10,
+        "timing": 3,
+        "funder_affinity": 5
+      },
+      "matched_units": ["G2-O2", "G4-O1"],
+      "effort": {
+        "level": "High",
+        "hours_est": 240,
+        "notes": "Large capital projects ($100M+). Very high application burden. BCA required."
+      },
+      "summary": "Large discretionary grants for nationally or regionally significant freight and highway projects. Minimum request $25M (small projects) or $100M (large projects). Funds highway interchange improvements, freight bottlenecks, and multimodal connectors. Forecasted for FY2027.",
+      "eligibility_note": "State DOTs, MPOs, local governments, and special authorities. Projects must be on National Highway Freight Network or NHS.",
+      "risk_note": "Very high effort application. Best suited for projects already in STIP/TIP. Forecasted — NOFO not yet posted. AI-draft.",
+      "source_text": "INFRA Grants. CFDA 20.933. Federal share up to 60% (large projects). Benefit-cost analysis required. Project readiness heavily weighted."
+    }
+  ]
+}

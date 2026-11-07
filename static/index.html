@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Federal Funds Matchmaker</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="site-header">
+  <div class="header-left">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">Federal Funds Matchmaker</span>
+  </div>
+  <div class="header-center" id="refresh-status">
+    <span id="refresh-label">Loading…</span>
+  </div>
+  <div class="header-right">
+    <div class="account-menu" id="account-menu">
+      <button class="account-btn" id="account-btn" aria-haspopup="true" aria-expanded="false">
+        <span id="account-name">NCDOT</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="account-dropdown" id="account-dropdown" role="menu">
+        <div class="account-dropdown-user" id="dropdown-user">Signed in as Demo User</div>
+        <hr class="dropdown-divider">
+        <div class="account-list" id="account-list"></div>
+        <hr class="dropdown-divider">
+        <button class="dropdown-item" id="btn-create-account">＋ Create account</button>
+        <button class="dropdown-item" id="btn-signout">Sign out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ MAIN TWO-PANEL ══════════════ -->
+<div class="app-layout">
+
+  <!-- LEFT PANEL: filters + ranked list -->
+  <aside class="left-panel">
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="filter-row">
+        <label class="filter-label" for="f-confidence">Confidence</label>
+        <select id="f-confidence" class="filter-select">
+          <option value="all">All</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <label class="filter-label" for="f-status">Status</label>
+        <select id="f-status" class="filter-select">
+          <option value="all">All</option>
+          <option value="posted">Posted</option>
+          <option value="forecasted">Forecasted</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <label class="filter-label" for="f-days">Closes within</label>
+        <input id="f-days" class="filter-input" type="number" min="1" placeholder="days">
+      </div>
+      <div class="filter-row filter-search-row">
+        <input id="f-search" class="filter-input filter-search" type="search" placeholder="🔍 Search title or agency…">
+      </div>
+    </div>
+
+    <!-- Mode badge -->
+    <div id="mode-banner" class="mode-banner hidden"></div>
+
+    <!-- List header -->
+    <div class="list-header">
+      <span id="list-count">— opportunities</span>
+      <div class="list-sort">
+        <label for="sort-by" class="sr-only">Sort by</label>
+        <select id="sort-by" class="filter-select filter-select-sm">
+          <option value="score">Score ↓</option>
+          <option value="close_date">Due date ↑</option>
+          <option value="undecided">Undecided first</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Opportunity list -->
+    <ol class="opp-list" id="opp-list" role="listbox" aria-label="Ranked opportunities"></ol>
+
+    <!-- Export -->
+    <div class="list-footer">
+      <a id="export-link" href="/api/export?account_id=ncdot" class="btn-export">↓ Export CSV</a>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT PANEL: detail -->
+  <main class="detail-panel" id="detail-panel" role="main">
+    <div class="detail-empty" id="detail-empty">
+      <div class="detail-empty-icon">◆</div>
+      <p>Select an opportunity from the list to see details.</p>
+    </div>
+    <!-- filled by JS -->
+    <div id="detail-content" class="hidden"></div>
+  </main>
+
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
