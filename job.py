@@ -207,7 +207,7 @@ def run(account_id: str = PROFILE_ID) -> dict:
     # Step 2: Ingest
     logger.info("=== Step 2: Ingest from Grants.gov ===")
     t0 = time.time()
-    raw_opps = ingest_for_profile(profile, fetch_details=False)
+    raw_opps = ingest_for_profile(profile, fetch_details=True)
     run_log["steps"]["ingest"] = {
         "raw_count": len(raw_opps),
         "elapsed_s": round(time.time() - t0, 1),

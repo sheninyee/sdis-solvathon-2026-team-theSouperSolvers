@@ -127,11 +127,37 @@ function renderList() {
     if (!li) return;
     selectOpportunity(li.dataset.id);
   };
+
+  // Sample data banner
+  const hasSample = items.some((o) => o.synthetic);
+  const banner = $("#sample-banner");
+  if (banner) banner.classList.toggle("hidden", !hasSample);
 }
 
 function confidenceBadge(c) {
   const cls = c === "High" ? "badge-high" : c === "Medium" ? "badge-medium" : "badge-low";
   return `<span class="badge ${cls}">${esc(c)}</span>`;
+}
+
+function eligibilityChip(opp) {
+  const v = opp.eligibility_verdict;
+  if (!v || v === "Unclear") return `<span class="badge badge-unclear" title="${esc(opp.eligibility_reason || 'Eligibility unclear — check listing')}">Unclear eligibility</span>`;
+  if (v === "Eligible") return `<span class="badge badge-eligible" title="${esc(opp.eligibility_reason || '')}">Eligible</span>`;
+  if (v === "Not eligible") return `<span class="badge badge-ineligible" title="${esc(opp.eligibility_reason || '')}">Not eligible</span>`;
+  return "";
+}
+
+function effortChip(opp) {
+  const level = opp.effort?.level;
+  if (!level || level === "not stated") return "";
+  const cls = level === "High" ? "badge-effort-high" : level === "Medium" ? "badge-effort-medium" : "badge-effort-low";
+  const hours = opp.effort?.hours_range;
+  return `<span class="badge ${cls}" title="${esc(opp.effort?.basis || '')}">${esc(level)}${hours ? " (" + esc(hours) + "h)" : ""} effort</span>`;
+}
+
+function syntheticBadge(opp) {
+  if (!opp.synthetic) return "";
+  return `<span class="badge badge-sample">SAMPLE DATA</span>`;
 }
 
 function dueLabel(opp) {
@@ -154,11 +180,13 @@ function oppRow(opp, rank) {
   return `<li class="opp-item" data-id="${esc(opp.id)}" role="option" aria-selected="false" tabindex="0">
     <span class="opp-rank">${rank}</span>
     <div class="opp-body">
-      <div class="opp-title">${esc(opp.title)}</div>
+      <div class="opp-title">${esc(opp.title)}${syntheticBadge(opp)}</div>
+      <div class="opp-funder">${esc(opp.funder || "")}</div>
       <div class="opp-meta">
-        <span class="opp-score">${opp.score ?? "—"}</span>
+        <span class="opp-score score-pill">${opp.score ?? "—"}</span>
         ${confidenceBadge(opp.confidence)}
-        <span class="opp-effort">${esc(opp.effort?.level ?? "—")} effort</span>
+        ${effortChip(opp)}
+        ${eligibilityChip(opp)}
         ${dueLabel(opp)}
         ${decisionBadge(opp.id)}
       </div>
@@ -183,7 +211,7 @@ function renderDetail(opp) {
   panel.classList.remove("hidden");
 
   const dec = S.decisions[opp.id] ?? {};
-  const bd = opp.breakdown ?? {};
+  const bd = opp.score_breakdown ?? opp.breakdown ?? {};
   const ai = opp.ai ?? {};
   const effort = opp.effort ?? {};
 
@@ -253,7 +281,14 @@ function renderDetail(opp) {
           ${ai.evidence_quote ? `<div class="evidence-quote">"${esc(ai.evidence_quote)}"</div>` : ""}
         </div>
         <div class="detail-tab-pane${S.detailTab === 'eligibility' ? ' active' : ''}" id="pane-eligibility">
-          <p>${esc(ai.eligibility_notes || (opp.eligibility?.join(", ") || "Eligibility not stated."))}</p>
+          <div class="elig-verdict-row">
+            ${eligibilityChip(opp)}
+            ${opp.eligibility_reason ? `<span class="elig-reason">${esc(opp.eligibility_reason)}</span>` : ""}
+          </div>
+          ${opp.applicant_types?.length ? `<p class="elig-types"><strong>Listed types:</strong> ${opp.applicant_types.map(esc).join(", ")}</p>` : ""}
+          ${opp.eligibility_note ? `<details class="elig-raw"><summary>Source text</summary><p>${esc(opp.eligibility_note)}</p></details>` : ""}
+          ${!opp.eligibility_verdict ? `<p style="color:var(--muted)">Eligibility not stated — check the official listing.</p>` : ""}
+          <p style="font-size:11px;color:var(--faint);margin-top:8px">Eligibility is determined by rule — always verify against the listing.</p>
         </div>
         <div class="detail-tab-pane${S.detailTab === 'risk' ? ' active' : ''}" id="pane-risk">
           <p>${esc(ai.risk_or_gap || "No risk analysis available.")}</p>
@@ -303,7 +338,7 @@ function renderDetail(opp) {
 
 function breakdownBar(label, value, weight) {
   const v = value ?? 0;
-  const pct = Math.round(v * 100);
+  const pct = Math.round(v);  // values already 0-100 scale
   return `<div class="breakdown-row">
     <span class="breakdown-label">${esc(label)}<br><span style="font-size:10px;color:var(--faint)">${weight}%</span></span>
     <div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${pct}%"></div></div>

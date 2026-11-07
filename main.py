@@ -227,20 +227,34 @@ def export_csv(account_id: str = "ncdot"):
     decisions = list_decisions(account_id)
     items = opp_data.get("items", [])
 
-    rows = ["rank,title,funder,score,confidence,effort,close_date,status,decision,note,url"]
+    # Columns per UI_EDIT_LIST.md section 8
+    export_date = __import__("datetime").date.today().isoformat()
+    fname = f"ffm_{account_id}_{export_date}.csv"
+    header = "rank,title,funder,opp_number,status,score,confidence,matched_goal,eligibility,effort,due_date,days_left,award_ceiling,decision,note,link"
+    rows = [header]
     for item in items:
         d = decisions.get(item["id"], {})
+        def q(s): return f'"{str(s or "").replace(chr(34), chr(39))}"'
+        matched = ""
+        if item.get("matched_units"):
+            mu = item["matched_units"]
+            matched = mu[0].get("id", mu[0]) if isinstance(mu[0], dict) else mu[0]
         row = [
             str(item.get("rank", "")),
-            f'"{item.get("title","").replace(chr(34), chr(39))}"',
-            f'"{item.get("funder","")}"',
+            q(item.get("title", "")),
+            q(item.get("funder", "")),
+            q(item.get("number", item.get("cfda", ""))),
+            item.get("status", ""),
             str(item.get("score", "")),
             item.get("confidence", ""),
-            item.get("effort", {}).get("level", ""),
+            q(matched),
+            item.get("eligibility_verdict", ""),
+            item.get("effort", {}).get("level", "") if isinstance(item.get("effort"), dict) else str(item.get("effort", "")),
             item.get("close_date", "") or "",
-            item.get("status", ""),
+            str(item.get("days_to_close", "")) if item.get("days_to_close") is not None else "",
+            str(int(item.get("max_award_usd") or 0)) if item.get("max_award_usd") else "",
             d.get("decision", ""),
-            f'"{d.get("note","")}"',
+            q(d.get("note", "")),
             item.get("url", ""),
         ]
         rows.append(",".join(row))
@@ -249,7 +263,7 @@ def export_csv(account_id: str = "ncdot"):
     return Response(
         content=csv_content,
         media_type="text/csv",
-        headers={"Content-Disposition": f'attachment; filename="ffm_{account_id}.csv"'},
+        headers={"Content-Disposition": f'attachment; filename="{fname}"'},
     )
 
 

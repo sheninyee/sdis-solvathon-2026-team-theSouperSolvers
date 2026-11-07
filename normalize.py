@@ -169,9 +169,75 @@ def normalize_opportunity(raw: dict) -> Optional[dict]:
         _get_first(raw, "eligibilities", "eligibilityText", "applicantTypes", default="")
     )
 
+    # Applicant types as a list (from detail fetch synopsis.applicantTypes[])
+    raw_appl_types = (
+        raw.get("synopsis", {}).get("applicantTypes")
+        or raw.get("applicantTypes")
+        or raw.get("applicant_types")
+        or []
+    )
+    if isinstance(raw_appl_types, list):
+        applicant_types = [
+            (t.get("applicantTypeDesc") or t.get("description") or str(t)).strip()
+            for t in raw_appl_types
+            if t
+        ]
+    else:
+        applicant_types = []
+
+    # Cost share (bool)
+    cost_share_raw = (
+        raw.get("synopsis", {}).get("costSharing")
+        or raw.get("costSharing")
+        or raw.get("cost_sharing")
+        or raw.get("cost_share")
+    )
+    cost_share = bool(cost_share_raw) if cost_share_raw is not None else None
+
+    # Description (synopsisDesc from detail — may contain HTML, strip it)
+    description = _strip_html(
+        raw.get("synopsis", {}).get("synopsisDesc")
+        or raw.get("synopsisDesc")
+        or raw.get("description")
+        or ""
+    )
+
+    # Contact info from detail
+    contact_name = (
+        raw.get("synopsis", {}).get("agencyContactName")
+        or raw.get("agencyContactName")
+        or raw.get("contactName")
+        or ""
+    )
+    contact_email = (
+        raw.get("synopsis", {}).get("agencyContactEmail")
+        or raw.get("agencyContactEmail")
+        or raw.get("contactEmail")
+        or ""
+    )
+
+    # Funding totals
+    num_awards = (
+        raw.get("synopsis", {}).get("expectedNumberOfAwards")
+        or raw.get("expectedNumberOfAwards")
+        or raw.get("num_awards")
+    )
+    estimated_funding = None
+    try:
+        ef_raw = (
+            raw.get("synopsis", {}).get("estimatedFunding")
+            or raw.get("estimatedFunding")
+            or raw.get("estimated_funding")
+        )
+        if ef_raw:
+            estimated_funding = float(str(ef_raw).replace(",", ""))
+    except (ValueError, TypeError):
+        pass
+
     try:
         award_ceiling = float(
-            str(_get_first(raw, "awardCeiling", "award_ceiling", "maxAward", default=0) or 0)
+            str(_get_first(raw, "awardCeiling", "award_ceiling", "maxAward",
+                           raw.get("synopsis", {}).get("awardCeiling"), default=0) or 0)
             .replace(",", "")
         )
     except (ValueError, TypeError):
@@ -179,7 +245,8 @@ def normalize_opportunity(raw: dict) -> Optional[dict]:
 
     try:
         award_floor = float(
-            str(_get_first(raw, "awardFloor", "award_floor", "minAward", default=0) or 0)
+            str(_get_first(raw, "awardFloor", "award_floor", "minAward",
+                           raw.get("synopsis", {}).get("awardFloor"), default=0) or 0)
             .replace(",", "")
         )
     except (ValueError, TypeError):
@@ -208,7 +275,14 @@ def normalize_opportunity(raw: dict) -> Optional[dict]:
         "max_award_usd": award_ceiling,
         "min_award_usd": award_floor,
         "synopsis": synopsis,
+        "description": description or synopsis,
         "eligibility_note": eligibility_note,
+        "applicant_types": applicant_types,
+        "cost_share": cost_share,
+        "contact_name": contact_name,
+        "contact_email": contact_email,
+        "num_awards": num_awards,
+        "estimated_funding": estimated_funding,
         "source_text": synopsis[:1000] if synopsis else "",
         "quality_flags": flags,
     }

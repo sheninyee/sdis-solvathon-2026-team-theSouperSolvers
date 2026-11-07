@@ -48,16 +48,78 @@ FUNDER_AFFINITY: dict[str, float] = {
 }
 
 # ---------------------------------------------------------------------------
-# Effort heuristics — mapped from award size bucket
+# Effort heuristics — rule-based text signals (D1: always labeled "estimate")
 # ---------------------------------------------------------------------------
-def _effort_from_max_award(max_award_usd: Optional[float]) -> dict:
-    if max_award_usd is None or max_award_usd == 0:
-        return {"level": "Medium", "hours_est": 80, "notes": "Award size unknown — assumed medium effort."}
-    if max_award_usd < 500_000:
-        return {"level": "Low", "hours_est": 20, "notes": "Small grant (<$500K). Likely straightforward application."}
-    if max_award_usd < 5_000_000:
-        return {"level": "Medium", "hours_est": 80, "notes": "Mid-size grant ($500K–$5M). Standard narrative + BCA light."}
-    return {"level": "High", "hours_est": 180, "notes": "Large grant (>$5M). Full BCA, technical narrative, letters of support."}
+_CONSORTIUM_RE = re.compile(
+    r"\b(partnership|consortium|multi-?agency|letters?\s+of\s+support|collaborative)\b", re.I
+)
+_NEPA_RE = re.compile(
+    r"\b(NEPA|environmental\s+review|benefit-?cost\s+analysis|BCA)\b", re.I
+)
+EFFORT_HOURS = {"Low": "20–40", "Medium": "40–80", "High": "80+"}
+
+
+def _compute_effort(opp: dict) -> dict:
+    """Rule-based effort estimate. Points: cost_share +1, large/multi-year +1,
+    consortium language +1, NEPA/env review +1. 0-1→Low, 2→Medium, 3+→High."""
+    text = " ".join(filter(None, [
+        opp.get("synopsis", ""),
+        opp.get("description", ""),
+        opp.get("source_text", ""),
+        opp.get("eligibility_note", ""),
+    ]))
+
+    if not text.strip():
+        return {"level": "not stated", "hours_range": None, "basis": "Insufficient text to estimate."}
+
+    pts = 0
+    triggers = []
+
+    # Cost share
+    if opp.get("cost_share") or opp.get("cost_sharing"):
+        pts += 1
+        triggers.append("cost share required")
+
+    # Large award or multi-year scope
+    max_award = opp.get("max_award_usd") or 0
+    if max_award >= 10_000_000:
+        pts += 1
+        triggers.append(f"large award (${max_award:,.0f})")
+    elif re.search(r"\bmulti-?year\b|\b(5|four|five|six|seven)\s+year", text, re.I):
+        pts += 1
+        triggers.append("multi-year scope")
+
+    # Consortium/partnership language
+    if _CONSORTIUM_RE.search(text):
+        pts += 1
+        triggers.append("consortium/partnership language")
+
+    # Environmental/NEPA review
+    if _NEPA_RE.search(text):
+        pts += 1
+        triggers.append("NEPA or environmental review")
+
+    if pts <= 1:
+        level = "Low"
+    elif pts == 2:
+        level = "Medium"
+    else:
+        level = "High"
+
+    hours = EFFORT_HOURS[level]
+    basis = "; ".join(triggers) if triggers else "no complexity signals found"
+    return {"level": level, "hours_range": hours, "basis": basis.capitalize() + "."}
+
+
+def _days_to_close(close_date_str: Optional[str], status: str = "posted") -> Optional[int]:
+    """Days until close date. Returns None for forecasted or missing dates."""
+    if not close_date_str or (status or "").lower() == "forecasted":
+        return None
+    try:
+        close = date.fromisoformat(close_date_str[:10])
+        return max(0, (close - date.today()).days)
+    except (ValueError, TypeError):
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -288,6 +350,48 @@ def score_opportunity(
     sem = semantic_score(opp_text, profile_embedding)
     kw = keyword_score(opp_text, all_kws)
     elig = eligibility_score(opp_text, eligibility_text)
+
+    # Account-aware eligibility verdict (displayed in UI)
+    applicant_types = opp.get("applicant_types", [])  # from detail fetch
+    account_types = profile.get("applicant_types", [])  # from account profile
+    elig_note = opp.get("eligibility_note", "")
+
+    if applicant_types and account_types:
+        # Check overlap between account types and listing types
+        acct_set = {t.lower().strip() for t in account_types}
+        listing_set = {t.lower().strip() for t in applicant_types}
+        # Also try partial match (e.g. "state governments" matches "State government")
+        overlap = any(
+            any(a in l or l in a for l in listing_set)
+            for a in acct_set
+        )
+        if overlap:
+            elig_verdict = "Eligible"
+            elig_reason = f"Account type matches: {', '.join(applicant_types[:3])}"
+        else:
+            # Check if unrestricted
+            if any(w in elig_note.lower() for w in ["all organizations", "unrestricted", "any applicant", "all entities"]):
+                elig_verdict = "Eligible"
+                elig_reason = "Unrestricted — open to all applicants"
+            else:
+                elig_verdict = "Not eligible"
+                elig_reason = f"Listed types ({', '.join(applicant_types[:3])}) do not match account type"
+    elif elig_note:
+        # Check for exclusionary language
+        exclusion_re = re.compile(r"\b(only|must be|limited to|tribal|nonprofit|501\(c\)|for-profit|small business|individual\s+applicants?)\b", re.I)
+        m = exclusion_re.search(elig_note)
+        if m:
+            # Find the sentence containing the match
+            sentences = [s.strip() for s in re.split(r"[.!?]", elig_note) if m.group() in s]
+            reason = sentences[0] if sentences else elig_note[:120]
+            elig_verdict = "Unclear"
+            elig_reason = f"Check listing: '{reason[:100]}'"
+        else:
+            elig_verdict = "Unclear"
+            elig_reason = "No applicant type data — verify eligibility in listing"
+    else:
+        elig_verdict = "Unclear"
+        elig_reason = "No eligibility information found"
     timing = timing_score(
         opp.get("close_date"),
         opp.get("posted_date"),
@@ -314,7 +418,7 @@ def score_opportunity(
     matched = matched_units_for(opp_text, unit_kw_map)
 
     # Effort from max_award if available
-    effort = opp.get("effort") or _effort_from_max_award(opp.get("max_award_usd"))
+    effort = opp.get("effort") or _compute_effort(opp)
 
     return {
         **opp,
@@ -329,6 +433,10 @@ def score_opportunity(
             "funder_affinity": round(funder * W_FUNDER * 100),
         },
         "effort": effort,
+        "eligibility_verdict": elig_verdict,
+        "eligibility_reason": elig_reason,
+        "applicant_types": applicant_types,
+        "days_to_close": _days_to_close(opp.get("close_date"), opp.get("status", "posted")),
     }
 
 
