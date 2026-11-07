@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!--
+
+  Souper Solvers
+  2026 Solve-a-thon
+  Team: The Souper Solvers
+    This is a simple front-end for a credit card complaint resolution ranking tool. It uses static data and does not require a server.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Souper Grants</title>
+
+<style>
+  :root{
+    --ink:#1b2a41; --paper:#eef1f6; --paper-2:#e2e7ef; --brass:#b8842e;
+    --teal:#3f6e64; --line:#c7cfda; --white:#fbfcfe;
+    --plum:#7d5a80; --slate:#54677a; --clay:#a6543c; --moss:#6b7a4f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    min-height:100%;
+  }
+  h1,h2,h3{font-family:inherit; font-weight:700; margin:0;}
+  .wrap{max-width:640px; margin:0 auto; padding:2.5rem 1.25rem 4rem;}
+  .kicker{color:var(--brass); font-size:0.8rem; letter-spacing:0.02em; margin-bottom:0.4rem;}
+  h1{font-size:1.7rem; line-height:1.25; margin-bottom:0.6rem;}
+  .sub{color:var(--ink); opacity:0.7; font-size:0.95rem; line-height:1.5; margin-bottom:2rem;}
+  .card{background:var(--white); border:1px solid var(--line); border-radius:6px; padding:1.4rem; margin-bottom:1rem;}
+  .q{margin-bottom:1.8rem;}
+  .q p{font-weight:600; margin:0 0 0.4rem;}
+  .hint{font-weight:400 !important; font-size:0.85rem; opacity:0.65; line-height:1.45; margin:0 0 0.8rem !important;}
+  .opt{display:block; width:100%; text-align:left; padding:0.7rem 0.9rem; margin-bottom:0.5rem;
+       border:1px solid var(--line); border-radius:5px; background:var(--white); color:var(--ink);
+       cursor:pointer; font-size:0.95rem; transition:border-color .15s, background .15s;}
+  .opt:hover{border-color:var(--brass);}
+  .opt.selected{border-color:var(--brass); background:rgba(184,132,46,0.1); font-weight:600;}
+  button.primary{
+    display:block; width:100%; padding:0.85rem; margin-top:1rem;
+    background:var(--ink); color:var(--paper); border:none; border-radius:5px;
+    font-size:1rem; font-weight:600; cursor:pointer;
+  }
+  button.primary:disabled{opacity:0.4; cursor:not-allowed;}
+  button.link{background:none; border:none; color:var(--teal); font-size:0.9rem; cursor:pointer; padding:0.4rem 0;}
+  .slider-row{margin-bottom:1.5rem;}
+  .slider-row .top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.2rem;}
+  .slider-row .top span:first-child{font-weight:600;}
+  .slider-row .top span:last-child{color:var(--brass); font-variant-numeric:tabular-nums;}
+  .def{font-size:0.85rem; opacity:0.75; line-height:1.4; margin:0.1rem 0 0.5rem;}
+  .slider-row input[type=range]{width:100%; accent-color:var(--brass);}
+  .reason{font-size:0.85rem; opacity:0.65; margin-top:0.3rem;}
+  .rank-item{background:var(--white); border:1px solid var(--line); border-radius:6px;
+             padding:1.1rem 1.3rem; margin-bottom:0.8rem;}
+  .rank-item .top{display:flex; justify-content:space-between; align-items:baseline;}
+  .rank-item .pos{font-size:1.4rem; font-weight:700; color:var(--brass); margin-right:0.6rem;}
+  .rank-item .name{font-size:1.05rem; font-weight:700;}
+  .rank-item .score{font-variant-numeric:tabular-nums; opacity:0.75; font-size:0.9rem;}
+  .detail{margin-top:0.7rem; border-top:1px solid var(--line); padding-top:0.6rem;}
+  .detail-row{padding:0.35rem 0;}
+  .detail-top{display:flex; justify-content:space-between; font-size:0.85rem;}
+  .detail-def{font-size:0.8rem; opacity:0.65; margin-top:0.1rem; line-height:1.35;}
+  .legend{font-size:0.8rem; opacity:0.65; margin-bottom:1rem; line-height:1.5;}
+  .note{font-size:0.8rem; opacity:0.6; margin-top:2rem; line-height:1.5;}
+    .dash-link{display:block; text-align:center; font-size:0.8rem; color:var(--teal);
+             text-decoration:none; margin-top:1.5rem; opacity:0.85;}
+  .dash-link:hover{opacity:1; text-decoration:underline;}
+  .legend-row{display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.4rem;}
+  .legend-item{display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; background:var(--white);
+               border:1px solid var(--line); border-radius:20px; padding:0.35rem 0.75rem; cursor:pointer;
+               opacity:1; transition:opacity .15s; color:var(--ink);}
+  .legend-item.dimmed{opacity:0.35;}
+  .legend-swatch{width:10px; height:10px; border-radius:2px; display:inline-block; flex-shrink:0;}
+  .stack-track{background:var(--paper-2); border-radius:3px; height:16px; margin-top:0.7rem; overflow:hidden; display:flex;}
+  .stack-seg{height:100%; transition:opacity .15s;}
+  .stack-caption{font-size:0.75rem; opacity:0.55; margin-top:0.4rem;}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+
+
+/* ---------- APP STATE + RENDER ---------- */
+let state = {screen:"intro", answers:{}, weights:null, why:null, highlightConcern:null};
+<script>
+function render(){
+  const app = document.getElementById("app");
+  if(state.screen==="intro") app.innerHTML = introHTML();
+  else if(state.screen==="quiz") app.innerHTML = quizHTML();
+  else if(state.screen==="confirm") app.innerHTML = confirmHTML();
+  else app.innerHTML = resultsHTML();
+  attachHandlers();
+}
+
+function introHTML(){
+  return `
+    <div class="kicker">Souper Solvers</div>
+    <h1>Which of these four banks actually resolves complaints the way you'd want?</h1>
+    <p class="sub">Bank of America, Capital One, Chase, and Wells Fargo don't resolve credit-card complaints the same way. The difference depends on what kind of issue you run into. Answer six quick questions and we'll show you a ranking based on real resolution outcomes for the things you care about most.</p>
+     <button class="primary" id="start">Start</button>
+    <a class="dash-link" href="https://rrrealww.shinyapps.io/credit-card-compass/" target="_blank">Explore the underlying data →</a>
+  `;
+}
+
+function quizHTML(){
+  const qs = QUIZ.map(q => `
+    <div class="q">
+      <p>${q.prompt}</p>
+      <p class="hint">${q.hint}</p>
+      ${q.opts.map(o => `<button class="opt ${state.answers[q.id]===o?'selected':''}" data-q="${q.id}" data-opt="${o}">${o}</button>`).join("")}
+    </div>
+  `).join("");
+  const allAnswered = QUIZ.every(q => state.answers[q.id]);
+  return `
+    <div class="kicker">Step 1 of 3</div>
+    <h1>A few quick questions</h1>
+    <p class="sub">Each question maps to one of the six categories you'll see next. You'll see exactly why, and can adjust before we rank anything.</p>
+    <div class="card">${qs}</div>
+    <button class="primary" id="toConfirm" ${allAnswered? "":"disabled"}>See what we're prioritizing</button>
+  `;
+}
+
+function confirmHTML(){
+  const {weights, why} = computeWeights(state.answers);
+  state.weights = weights; state.why = why;
+  const rows = CONCERNS.map(c => `
+    <div class="slider-row">
+      <div class="top"><span>${c}</span><span>${weights[c].toFixed(1)}&times;</span></div>
+      <div class="def">${CONCERN_DEFS[c]}</div>
+      <input type="range" min="1" max="3" step="0.1" value="${weights[c]}" data-concern="${c}">
+      <div class="reason">${why[c] ? "Weighted higher because " + why[c] : "Default weight. Your answer here didn't point to extra priority."}</div>
+    </div>
+  `).join("");
+  return `
+    <div class="kicker">Step 2 of 3</div>
+    <h1>Here's what we're prioritizing</h1>
+    <p class="sub">Based on your answers. Drag any slider to change how much a category counts, nothing here is fixed.</p>
+    <div class="card">${rows}</div>
+    <button class="primary" id="toResults">See my bank ranking</button>
+    <button class="link" id="backToQuiz">&larr; back to questions</button>
+  `;
+}
+
+function resultsHTML(){
+  const weights = state.weights || computeWeights(state.answers).weights;
+  const ranked = rankBanks(weights);
+  const maxScore = Math.max(...ranked.map(r => r.score));
+  const hl = state.highlightConcern;
+
+  const legendItems = CONCERNS.map(c => `
+    <button class="legend-item ${hl && hl!==c ? 'dimmed':''}" data-concern="${c}">
+      <span class="legend-swatch" style="background:${CONCERN_COLORS[c]}"></span>${c}
+    </button>
+  `).join("");
+
+  const items = ranked.map((r,i) => {
+    const segs = r.detail.map(d => `
+      <div class="stack-seg" style="width:${(d.share*100).toFixed(2)}%; background:${CONCERN_COLORS[d.concern]}; opacity:${hl && hl!==d.concern ? 0.2 : 1}"
+           title="${d.concern}: ${(d.total*100).toFixed(1)}% relief, weighted ${d.w.toFixed(1)}x, based on ${d.n.toLocaleString()} complaints"></div>
+    `).join("");
+    return `
+    <div class="rank-item">
+      <div class="top">
+        <div><span class="pos">${i+1}</span><span class="name">${r.bank}</span></div>
+        <div class="score">${(r.score*100).toFixed(1)}% weighted relief rate</div>
+      </div>
+      <div class="stack-track" style="width:${(r.score/maxScore*100).toFixed(1)}%">${segs}</div>
+      <div class="detail">
+        ${r.detail.slice(0,3).map(d => `
+          <div class="detail-row">
+            <div class="detail-top"><span>${d.concern}</span><span>${(d.total*100).toFixed(1)}% relief (n=${d.n.toLocaleString()})</span></div>
+            <div class="detail-def">${CONCERN_DEFS[d.concern]}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `}).join("");
+
+  return `
+    <div class="kicker">Step 3 of 3</div>
+    <h1>Your ranking</h1>
+    <p class="sub">Weighted by the priorities you set. Each bar below is split into colored segments, one per concern, sized by how much that concern contributed to the bank's score. Click a category below to see just that slice across all four banks.</p>
+    <div class="legend-row">${legendItems}</div>
+    <p class="legend"><strong>How to read this:</strong> a longer bar means a higher overall weighted relief rate. Within each bar, a bigger colored segment means that concern, usually because you weighted it highly, played a bigger role in that bank's score. The list below each bar shows the exact numbers for your top-weighted concerns.</p>
+    ${items}
+    <p class="note">"Relief rate" reflects how often a company's response to a closed complaint included monetary or non-monetary relief, based on CFPB Consumer Complaint Database records for these four banks. It measures resolution responsiveness, not whether the consumer was in the right. A company can fairly deny relief and still close a complaint "with explanation."</p>
+    <button class="link" id="backToConfirm">&larr; adjust my priorities</button>
+    <button class="link" id="startOver">start over</button>
+    <a class="dash-link" href="https://rrrealww.shinyapps.io/credit-card-compass/" target="_blank">Explore the full dataset and analysis →</a>
+  `;
+}
+
+function attachHandlers(){
+  const start = document.getElementById("start");
+  if(start) start.onclick = () => { state.screen="quiz"; render(); };
+
+  document.querySelectorAll(".opt").forEach(btn=>{
+    btn.onclick = () => { state.answers[btn.dataset.q] = btn.dataset.opt; render(); };
+  });
+
+  const toConfirm = document.getElementById("toConfirm");
+  if(toConfirm) toConfirm.onclick = () => { state.screen="confirm"; render(); };
+
+  document.querySelectorAll("input[type=range]").forEach(inp=>{
+    inp.oninput = () => { state.weights[inp.dataset.concern] = parseFloat(inp.value);
+      inp.parentElement.querySelector(".top span:last-child").textContent = parseFloat(inp.value).toFixed(1)+"\u00d7"; };
+  });
+
+  const toResults = document.getElementById("toResults");
+  if(toResults) toResults.onclick = () => { state.screen="results"; render(); };
+
+  const backToQuiz = document.getElementById("backToQuiz");
+  if(backToQuiz) backToQuiz.onclick = () => { state.screen="quiz"; render(); };
+
+  const backToConfirm = document.getElementById("backToConfirm");
+  if(backToConfirm) backToConfirm.onclick = () => { state.screen="confirm"; render(); };
+
+  const startOver = document.getElementById("startOver");
+  if(startOver) startOver.onclick = () => { state = {screen:"intro", answers:{}, weights:null, why:null, highlightConcern:null}; render(); };
+
+  document.querySelectorAll(".legend-item").forEach(btn=>{
+    btn.onclick = () => {
+      const c = btn.dataset.concern;
+      state.highlightConcern = (state.highlightConcern === c) ? null : c;
+      render();
+    };
+  });
+}
+
+render();
+</script>
+</body>
+</html>

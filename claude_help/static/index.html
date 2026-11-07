@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Souper Grants</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+  <div class="masthead">
+    <div>
+      <div class="brand"><span>&#9672;</span>Dashboard</div>
+      <small class="muted">Grant opportunities.</small>
+    </div>
+    <div class="badge-source" id="badge">Grants snapshot</div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: navy filter panel -->
+    <aside>
+      <div class="filter-panel">
+        <div class="eyebrow">Your data, your view</div>
+        <h3>Explore the evidence</h3>
+
+        <label for="type">Opportunity type</label>
+        <select id="type" class="form-control"></select>
+
+        <label for="year">Year posted</label>
+        <select id="year" class="form-control"></select>
+
+        <label>Compare agencies</label>
+        <div class="ms" id="ms">
+          <div class="form-control ms-box" id="ms-box">All available agencies</div>
+          <div class="ms-panel" id="ms-panel"></div>
+        </div>
+        <p class="help">Leave empty to include all available agencies.</p>
+
+        <label for="minn">Minimum grants per category for ranking</label>
+        <input id="minn" class="form-control" type="number" min="1" step="1" value="20">
+
+        <a id="download" class="btn-light" href="/download">&#11015; Download filtered summary</a>
+      </div>
+      <div class="footer-note">
+        <strong>How to read scores</strong><br>
+        Scores summarize award size and number of awards. Shares and averages describe the
+        opportunities listed, not your chance of winning a grant.
+      </div>
+    </aside>
+
+    <!-- RIGHT: hero, notice, tabs, content -->
+    <main>
+      <div class="hero">
+        <div class="eyebrow">SOUPER GRANTS / EXPLORER</div>
+        <h1>A clearer view of your funding options.</h1>
+      </div>
+      <div id="status"></div>
+      <div class="tabs" id="tabs">
+        <button data-tab="dashboard" class="active">Dashboard</button>
+        <button data-tab="agency">Agency overview</button>
+        <button data-tab="scores">Score comparison</button>
+      </div>
+      <div id="view"></div>
+    </main>
+  </div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

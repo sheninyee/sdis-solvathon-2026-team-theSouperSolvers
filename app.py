@@ -18,18 +18,53 @@ class WebsiteHandler(BaseHTTPRequestHandler):
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Souper Grants</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
+      <!-- One stage in a 1600×900 design space: 1cqw = 16 design px. -->
+      :root {
+        color-scheme: light;
+        --cream: #f5f1e8;
+        --paper: #fffdf8;
+        --ink: #173c36;
+        --muted: #5f6f65;
+        --faint: #9aa79e;
+        --line: #d6d9ca;
+        --lime: #cfe4a6;
+        --coral: #c95b41;
+        --coral-soft: #f7dfd3;
+        --teal: #2e7d70;
+        --stone: #b7c4bd;
+        --sans: "Avenir Next", "Segoe UI", Arial, sans-serif;
+        --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
       }
-      h1 {
-        color: #333;
-        text-align: center;
+
+      # body {
+      #   font-family: Arial, sans-serif;
+      #   margin: 20px;
+      # }
+      # h1 {
+      #   color: #333;
+      #   text-align: center;
+      # }
+      div {
+        <!-- Taken from https://www.w3schools.com/css/css_boxmodel.asp -->
+        width: 300px;
+        border: 15px solid green;
+        padding: 50px;
+        margin: 20px;
       }
     </style>
   </head>
   <body>
-    <h1>Souper Grants</h1>
+    <h1>Welcome to Souper Grants!</h1>
+    <h2>The only place you'll need to explore federal grants</h2>
+    <p>With 1,662 federal grants here alone, and thousands more out there, we've got you covered.</p>
+    <p>Use the filters to categorize what you're looking for.</p>
+    <div class="my-box"> 
+      <!-- Taken from https://www.w3schools.com/css/css_boxmodel.asp -->
+      <h3>Grant Categories</h3>
+      <p>Transportation, Infrastructure, Education, and many more</p>
+    </div>
+
   </body>
 </html>
 """
