@@ -114,6 +114,7 @@ def _empty_profile(account_id: str, org_name: str) -> dict:
     }
 
 from fastapi import FastAPI, File, Form, HTTPException, Query, Request, Response, UploadFile
+from pydantic import BaseModel
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -762,7 +763,8 @@ async def save_decision(opp_id: str, request: Request, account_id: str = "ncdot"
 # ---------------------------------------------------------------------------
 @app.get("/api/accounts")
 def list_accounts():
-    """Return seeded accounts (NCDOT pre-seeded)."""
+    """Return seeded accounts (NCDOT pre-seeded + any user-created ones)."""
+    import datetime
     ncdot = _read_blob("accounts/ncdot.json") or _read_local("accounts_ncdot.json")
     if not ncdot:
         ncdot = {
@@ -773,7 +775,51 @@ def list_accounts():
             "created_at": "2026-11-07T00:00:00Z",
             "profile_status": "ai-draft",
         }
-    return {"accounts": [ncdot]}
+    accounts = [ncdot]
+    # Also load any user-created accounts from local profiles dir
+    for p in PROFILES_DIR.glob("*.json"):
+        if p.stem == "ncdot":
+            continue
+        try:
+            data = json.loads(p.read_text())
+            if "account_id" in data:
+                accounts.append(data)
+        except Exception:
+            pass
+    return {"accounts": accounts}
+
+
+class CreateAccountRequest(BaseModel):
+    display_name: str
+    type: str = "department"
+
+
+@app.post("/api/accounts")
+def create_account(req: CreateAccountRequest):
+    """Create a new department/division account (demo-grade, stored locally)."""
+    import datetime
+    if not req.display_name or not req.display_name.strip():
+        raise HTTPException(status_code=422, detail="display_name is required")
+    # Derive a stable account_id from the display name
+    slug = re.sub(r"[^a-z0-9]+", "", req.display_name.lower())[:20] or "acct"
+    account_id = slug
+    # Avoid collision with existing accounts
+    existing = set(p.stem for p in PROFILES_DIR.glob("*.json"))
+    if account_id in existing:
+        account_id = slug + "_" + str(len(existing))
+    record = {
+        "account_id": account_id,
+        "display_name": req.display_name.strip(),
+        "type": req.type,
+        "owner_user_id": "demo",
+        "created_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "profile_status": "new",
+    }
+    # Persist locally
+    out_path = PROFILES_DIR / f"{account_id}.json"
+    out_path.write_text(json.dumps(record, indent=2))
+    logger.info("Created account %s (%s)", account_id, req.display_name)
+    return record
 
 
 # ---------------------------------------------------------------------------
