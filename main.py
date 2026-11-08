@@ -456,44 +456,50 @@ def assess_fit(opp_id: str, account_id: str = "ncdot"):
         "balanced": "The organization balances award size and application effort equally.",
     }.get(priority, "The organization balances award size and application effort equally.")
 
-    prompt = f"""You are a grants intelligence advisor helping {org_name}.
+    prompt = f"""You are a grants intelligence advisor helping {org_name}, a state government agency.
 
-GRANT ANALYSIS:
+Write a 3-part briefing for a program manager reviewing this grant. Use only the provided data — do not invent or infer facts not present in the source. If a field is missing, write "Not specified in the available notice."
+
+GRANT DATA:
 {json.dumps(analysis, indent=2)}
 
-ORGANIZATION STRATEGIC GOALS:
-{units_text}
+AGENCY STRATEGIC GOALS:
+{units_text if units_text else "Not provided — infer from agency statutory mission."}
 
-ORGANIZATION PRIORITY: {priority_guidance}
+AGENCY PRIORITY: {priority_guidance}
 
-Return ONLY valid JSON matching this schema:
+Return ONLY valid JSON matching this exact schema:
 {{
-  "why_relevant": "2-3 sentences explaining how this grant aligns with the org's strategic goals, directly referencing the grant content",
-  "recommendation": "pursue" | "maybe" | "pass",
-  "fit_notes": "1-2 sentences on fit gaps, risks, or what would need to be true to pursue"
+  "purpose": "1-2 sentences: what problem does this grant address and what does it fund?",
+  "fit": "1-2 sentences: what specific agency priority, program, or activity could this support? Name something concrete; if none, name the closest relevant agency goal or mission area.",
+  "watch_out": "1-2 sentences on a genuinely noteworthy barrier — cost-share obligation, cap on number of awards, narrow eligibility, or very short turnaround. Set to null if nothing stands out.",
+  "recommendation": "pursue | maybe | pass"
 }}
 
 Rules:
-- why_relevant must cite specific grant elements (title, funder, funded activities) and specific strategic goals
-- recommendation: "pursue" if strong fit + matches priority, "maybe" if partial fit, "pass" if poor fit
-- Never invent facts. Base assessment only on the grant analysis provided.
-- Return only the JSON object, no markdown."""
+- purpose and fit: draw only from the grant data provided. If a field is missing, write "Not specified in the available notice."
+- watch_out: include ONLY when there is a real, specific concern worth flagging. Set to null otherwise — do not pad with generic advice.
+- recommendation: "pursue" = strong fit + matches agency priority; "maybe" = partial fit or uncertainty; "pass" = poor fit.
+- Tone: plain English for a program manager, not a grants officer. No jargon.
+- Return only the JSON object, no markdown, no explanation."""
 
     result_text = _call_chat([{"role": "user", "content": prompt}], max_tokens=600)
     if not result_text:
         result = {
-            "why_relevant": "Fit assessment unavailable — AI service not configured.",
+            "purpose": "Fit assessment unavailable — AI service not configured.",
+            "fit": "Review the grant manually against your strategic goals.",
+            "watch_out": None,
             "recommendation": "maybe",
-            "fit_notes": "Review the grant manually against your strategic goals.",
         }
     else:
         try:
             result = json.loads(result_text)
         except Exception:
             result = {
-                "why_relevant": result_text[:400],
+                "purpose": result_text[:400],
+                "fit": "",
+                "watch_out": None,
                 "recommendation": "maybe",
-                "fit_notes": "",
             }
 
     result["opp_id"] = opp_id

@@ -544,8 +544,12 @@ function renderDetail(opp) {
       const m = recMeta[rec] || recMeta.maybe;
       fitEl.innerHTML =
         `<span class="fit-rec-badge" style="background:${m.bg};color:${m.text}">${m.label}</span>` +
-        (data.why_relevant ? `<p class="fit-why">${esc(data.why_relevant)}</p>` : "") +
-        (data.fit_notes    ? `<p class="fit-notes">${esc(data.fit_notes)}</p>`    : "");
+        (data.purpose     ? `<p class="fit-section"><span class="fit-label">Purpose</span> ${esc(data.purpose)}</p>` : "") +
+        (data.fit         ? `<p class="fit-section"><span class="fit-label">Fit</span> ${esc(data.fit)}</p>` : "") +
+        (data.watch_out   ? `<p class="fit-section fit-watchout"><span class="fit-label">⚠ Watch out</span> ${esc(data.watch_out)}</p>` : "") +
+        // backward-compat with old cached responses
+        (!data.purpose && data.why_relevant ? `<p class="fit-why">${esc(data.why_relevant)}</p>` : "") +
+        (!data.purpose && data.fit_notes    ? `<p class="fit-notes">${esc(data.fit_notes)}</p>`    : "");
     } catch (_) {
       // Fall back to the rule-based relevance summary already on screen
       fitEl.textContent = "";
