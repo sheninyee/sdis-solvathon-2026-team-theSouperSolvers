@@ -132,6 +132,8 @@ def search_opportunities(
         or []
     )
     logger.info("Search '%s' → %d results", " ".join(keyword_set), len(opps))
+    if opps and logger.isEnabledFor(logging.DEBUG):
+        logger.debug("First result keys: %s", list(opps[0].keys()))
     return opps
 
 
@@ -164,12 +166,17 @@ def ingest_for_profile(profile: dict, fetch_details: bool = True) -> list[dict]:
     for kw_set in keyword_sets:
         opps = search_opportunities(kw_set)
         for opp in opps:
-            opp_id = str(opp.get("id") or opp.get("oppNumber") or opp.get("opportunity_id", ""))
+            # Numeric id for dedup; oppNumber (string) for detail fetch
+            opp_id = str(opp.get("id") or opp.get("opportunityId") or opp.get("opportunity_id", ""))
+            opp_number = str(opp.get("oppNumber") or opp.get("opportunityNumber") or opp.get("number") or opp_id)
             if not opp_id or opp_id in seen_ids:
                 continue
             seen_ids.add(opp_id)
             if fetch_details:
-                detail = fetch_detail(opp_id)
+                # Try oppNumber first (string form), fall back to numeric id
+                detail = fetch_detail(opp_number)
+                if not detail and opp_number != opp_id:
+                    detail = fetch_detail(opp_id)
                 if detail:
                     opp = {**opp, **detail}  # merge detail fields
             all_opps.append(opp)
