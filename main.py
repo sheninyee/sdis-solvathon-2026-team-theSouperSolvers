@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+import traceback
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -571,17 +572,24 @@ async def project_match(
     Extracts project text, generates a project summary, then ranks
     the account's current grant opportunities by relevance.
     """
-    form = await request.form()
+    try:
+        form = await request.form()
+    except Exception as form_err:
+        logger.error("project_match form parse failed: %s\n%s", form_err, traceback.format_exc())
+        raise HTTPException(422, f"Form parse error: {form_err}")
     pasted_text = form.get("pasted_text", "") or ""
 
     # Extract text from each uploaded file
     file_texts = []
     for key, value in form.multi_items():
         if key == "files" and hasattr(value, "filename"):
-            raw = await value.read()
-            extracted = _extract_text_from_upload(value.filename, raw)
-            if extracted.strip():
-                file_texts.append(f"[File: {value.filename}]\n{extracted}")
+            try:
+                raw = await value.read()
+                extracted = _extract_text_from_upload(value.filename, raw)
+                if extracted.strip():
+                    file_texts.append(f"[File: {value.filename}]\n{extracted}")
+            except Exception as file_err:
+                logger.warning("project_match file read failed %s: %s", value.filename, file_err)
 
     all_text = "\n\n---\n\n".join(filter(None, [pasted_text] + file_texts))
     if not all_text.strip():
@@ -670,19 +678,22 @@ Rules:
         }
 
     # Enrich matches with full item data (eligibility, score breakdown, dates)
-    items_by_id = {item.get("id"): item for item in opp_data.get("items", [])}
-    for m in result.get("matches", []):
-        full = items_by_id.get(m.get("opp_id"), {})
-        m["score"] = full.get("score")
-        m["confidence"] = full.get("confidence")
-        m["close_date"] = full.get("close_date")
-        m["days_to_close"] = full.get("days_to_close")
-        m["url"] = full.get("url")
-        m["effort"] = full.get("effort", {})
-        m["funder"] = full.get("funder") or m.get("funder")
-        m["eligibility_verdict"] = full.get("eligibility_verdict")
-        m["eligibility_reason"] = full.get("eligibility_reason")
-        m["score_breakdown"] = full.get("score_breakdown", {})
+    try:
+        items_by_id = {item.get("id"): item for item in opp_data.get("items", [])}
+        for m in result.get("matches", []):
+            full = items_by_id.get(m.get("opp_id"), {})
+            m["score"] = full.get("score")
+            m["confidence"] = full.get("confidence")
+            m["close_date"] = full.get("close_date")
+            m["days_to_close"] = full.get("days_to_close")
+            m["url"] = full.get("url")
+            m["effort"] = full.get("effort", {})
+            m["funder"] = full.get("funder") or m.get("funder")
+            m["eligibility_verdict"] = full.get("eligibility_verdict")
+            m["eligibility_reason"] = full.get("eligibility_reason")
+            m["score_breakdown"] = full.get("score_breakdown", {})
+    except Exception as enrich_err:
+        logger.error("project_match enrich failed: %s\n%s", enrich_err, traceback.format_exc())
 
     return result
 
