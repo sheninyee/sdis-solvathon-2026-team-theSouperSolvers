@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+import traceback
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -114,6 +115,7 @@ def _empty_profile(account_id: str, org_name: str) -> dict:
     }
 
 from fastapi import FastAPI, File, Form, HTTPException, Query, Request, Response, UploadFile
+from pydantic import BaseModel
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -454,44 +456,50 @@ def assess_fit(opp_id: str, account_id: str = "ncdot"):
         "balanced": "The organization balances award size and application effort equally.",
     }.get(priority, "The organization balances award size and application effort equally.")
 
-    prompt = f"""You are a grants intelligence advisor helping {org_name}.
+    prompt = f"""You are a grants intelligence advisor helping {org_name}, a state government agency.
 
-GRANT ANALYSIS:
+Write a 3-part briefing for a program manager reviewing this grant. Use only the provided data — do not invent or infer facts not present in the source. If a field is missing, write "Not specified in the available notice."
+
+GRANT DATA:
 {json.dumps(analysis, indent=2)}
 
-ORGANIZATION STRATEGIC GOALS:
-{units_text}
+AGENCY STRATEGIC GOALS:
+{units_text if units_text else "Not provided — infer from agency statutory mission."}
 
-ORGANIZATION PRIORITY: {priority_guidance}
+AGENCY PRIORITY: {priority_guidance}
 
-Return ONLY valid JSON matching this schema:
+Return ONLY valid JSON matching this exact schema:
 {{
-  "why_relevant": "2-3 sentences explaining how this grant aligns with the org's strategic goals, directly referencing the grant content",
-  "recommendation": "pursue" | "maybe" | "pass",
-  "fit_notes": "1-2 sentences on fit gaps, risks, or what would need to be true to pursue"
+  "purpose": "1-2 sentences: what problem does this grant address and what does it fund?",
+  "fit": "1-2 sentences: what specific agency priority, program, or activity could this support? Name something concrete; if none, name the closest relevant agency goal or mission area.",
+  "watch_out": "1-2 sentences on a genuinely noteworthy barrier — cost-share obligation, cap on number of awards, narrow eligibility, or very short turnaround. Set to null if nothing stands out.",
+  "recommendation": "pursue | maybe | pass"
 }}
 
 Rules:
-- why_relevant must cite specific grant elements (title, funder, funded activities) and specific strategic goals
-- recommendation: "pursue" if strong fit + matches priority, "maybe" if partial fit, "pass" if poor fit
-- Never invent facts. Base assessment only on the grant analysis provided.
-- Return only the JSON object, no markdown."""
+- purpose and fit: draw only from the grant data provided. If a field is missing, write "Not specified in the available notice."
+- watch_out: include ONLY when there is a real, specific concern worth flagging. Set to null otherwise — do not pad with generic advice.
+- recommendation: "pursue" = strong fit + matches agency priority; "maybe" = partial fit or uncertainty; "pass" = poor fit.
+- Tone: plain English for a program manager, not a grants officer. No jargon.
+- Return only the JSON object, no markdown, no explanation."""
 
     result_text = _call_chat([{"role": "user", "content": prompt}], max_tokens=600)
     if not result_text:
         result = {
-            "why_relevant": "Fit assessment unavailable — AI service not configured.",
+            "purpose": "Fit assessment unavailable — AI service not configured.",
+            "fit": "Review the grant manually against your strategic goals.",
+            "watch_out": None,
             "recommendation": "maybe",
-            "fit_notes": "Review the grant manually against your strategic goals.",
         }
     else:
         try:
             result = json.loads(result_text)
         except Exception:
             result = {
-                "why_relevant": result_text[:400],
+                "purpose": result_text[:400],
+                "fit": "",
+                "watch_out": None,
                 "recommendation": "maybe",
-                "fit_notes": "",
             }
 
     result["opp_id"] = opp_id
@@ -570,17 +578,24 @@ async def project_match(
     Extracts project text, generates a project summary, then ranks
     the account's current grant opportunities by relevance.
     """
-    form = await request.form()
+    try:
+        form = await request.form()
+    except Exception as form_err:
+        logger.error("project_match form parse failed: %s\n%s", form_err, traceback.format_exc())
+        raise HTTPException(422, f"Form parse error: {form_err}")
     pasted_text = form.get("pasted_text", "") or ""
 
     # Extract text from each uploaded file
     file_texts = []
     for key, value in form.multi_items():
         if key == "files" and hasattr(value, "filename"):
-            raw = await value.read()
-            extracted = _extract_text_from_upload(value.filename, raw)
-            if extracted.strip():
-                file_texts.append(f"[File: {value.filename}]\n{extracted}")
+            try:
+                raw = await value.read()
+                extracted = _extract_text_from_upload(value.filename, raw)
+                if extracted.strip():
+                    file_texts.append(f"[File: {value.filename}]\n{extracted}")
+            except Exception as file_err:
+                logger.warning("project_match file read failed %s: %s", value.filename, file_err)
 
     all_text = "\n\n---\n\n".join(filter(None, [pasted_text] + file_texts))
     if not all_text.strip():
@@ -669,19 +684,22 @@ Rules:
         }
 
     # Enrich matches with full item data (eligibility, score breakdown, dates)
-    items_by_id = {item.get("id"): item for item in opp_data.get("items", [])}
-    for m in result.get("matches", []):
-        full = items_by_id.get(m.get("opp_id"), {})
-        m["score"] = full.get("score")
-        m["confidence"] = full.get("confidence")
-        m["close_date"] = full.get("close_date")
-        m["days_to_close"] = full.get("days_to_close")
-        m["url"] = full.get("url")
-        m["effort"] = full.get("effort", {})
-        m["funder"] = full.get("funder") or m.get("funder")
-        m["eligibility_verdict"] = full.get("eligibility_verdict")
-        m["eligibility_reason"] = full.get("eligibility_reason")
-        m["score_breakdown"] = full.get("score_breakdown", {})
+    try:
+        items_by_id = {item.get("id"): item for item in opp_data.get("items", [])}
+        for m in result.get("matches", []):
+            full = items_by_id.get(m.get("opp_id"), {})
+            m["score"] = full.get("score")
+            m["confidence"] = full.get("confidence")
+            m["close_date"] = full.get("close_date")
+            m["days_to_close"] = full.get("days_to_close")
+            m["url"] = full.get("url")
+            m["effort"] = full.get("effort", {})
+            m["funder"] = full.get("funder") or m.get("funder")
+            m["eligibility_verdict"] = full.get("eligibility_verdict")
+            m["eligibility_reason"] = full.get("eligibility_reason")
+            m["score_breakdown"] = full.get("score_breakdown", {})
+    except Exception as enrich_err:
+        logger.error("project_match enrich failed: %s\n%s", enrich_err, traceback.format_exc())
 
     return result
 
@@ -762,7 +780,8 @@ async def save_decision(opp_id: str, request: Request, account_id: str = "ncdot"
 # ---------------------------------------------------------------------------
 @app.get("/api/accounts")
 def list_accounts():
-    """Return seeded accounts (NCDOT pre-seeded)."""
+    """Return seeded accounts (NCDOT pre-seeded + any user-created ones)."""
+    import datetime
     ncdot = _read_blob("accounts/ncdot.json") or _read_local("accounts_ncdot.json")
     if not ncdot:
         ncdot = {
@@ -773,7 +792,51 @@ def list_accounts():
             "created_at": "2026-11-07T00:00:00Z",
             "profile_status": "ai-draft",
         }
-    return {"accounts": [ncdot]}
+    accounts = [ncdot]
+    # Also load any user-created accounts from local profiles dir
+    for p in PROFILES_DIR.glob("*.json"):
+        if p.stem == "ncdot":
+            continue
+        try:
+            data = json.loads(p.read_text())
+            if "account_id" in data:
+                accounts.append(data)
+        except Exception:
+            pass
+    return {"accounts": accounts}
+
+
+class CreateAccountRequest(BaseModel):
+    display_name: str
+    type: str = "department"
+
+
+@app.post("/api/accounts")
+def create_account(req: CreateAccountRequest):
+    """Create a new department/division account (demo-grade, stored locally)."""
+    import datetime
+    if not req.display_name or not req.display_name.strip():
+        raise HTTPException(status_code=422, detail="display_name is required")
+    # Derive a stable account_id from the display name
+    slug = re.sub(r"[^a-z0-9]+", "", req.display_name.lower())[:20] or "acct"
+    account_id = slug
+    # Avoid collision with existing accounts
+    existing = set(p.stem for p in PROFILES_DIR.glob("*.json"))
+    if account_id in existing:
+        account_id = slug + "_" + str(len(existing))
+    record = {
+        "account_id": account_id,
+        "display_name": req.display_name.strip(),
+        "type": req.type,
+        "owner_user_id": "demo",
+        "created_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "profile_status": "new",
+    }
+    # Persist locally
+    out_path = PROFILES_DIR / f"{account_id}.json"
+    out_path.write_text(json.dumps(record, indent=2))
+    logger.info("Created account %s (%s)", account_id, req.display_name)
+    return record
 
 
 # ---------------------------------------------------------------------------

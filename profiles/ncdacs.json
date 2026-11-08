@@ -1,0 +1,87 @@
+{
+  "account_id": "ncdacs",
+  "org_name": "NC Department of Agriculture and Consumer Services",
+  "matching_units": [
+    {
+      "id": "dacs_agricultural_dev",
+      "title": "Agricultural Development & Farm Support",
+      "keywords_plan": [
+        "agriculture", "farming", "farm support", "agricultural development",
+        "crop production", "livestock", "farm viability", "beginning farmer"
+      ],
+      "keywords_expansion": [
+        "farm bill", "USDA grants", "beginning farmers", "farm business",
+        "agricultural loan", "row crops", "specialty crops", "horticulture",
+        "small farm", "family farm", "farm income", "agricultural diversification"
+      ]
+    },
+    {
+      "id": "dacs_rural_economy",
+      "title": "Rural Economic Development & Agribusiness",
+      "keywords_plan": [
+        "rural development", "agribusiness", "rural economy", "value-added",
+        "food systems", "local food", "agricultural markets", "rural communities"
+      ],
+      "keywords_expansion": [
+        "farm-to-table", "farmers market", "food hub", "food processing",
+        "rural business", "cooperative", "agricultural tourism", "agritourism",
+        "food entrepreneur", "USDA rural development", "value chain",
+        "regional food system", "local procurement"
+      ]
+    },
+    {
+      "id": "dacs_food_safety",
+      "title": "Food Safety & Consumer Protection",
+      "keywords_plan": [
+        "food safety", "consumer protection", "food inspection",
+        "product safety", "regulatory compliance", "pesticides", "weights and measures"
+      ],
+      "keywords_expansion": [
+        "food borne illness", "food labeling", "food fraud", "market surveillance",
+        "product recall", "consumer fraud", "agricultural chemicals",
+        "food standards", "HACCP", "food defense", "supply chain safety"
+      ]
+    },
+    {
+      "id": "dacs_forestry",
+      "title": "Forestry & Natural Resources",
+      "keywords_plan": [
+        "forestry", "timber", "forest management", "tree planting",
+        "reforestation", "wildfire", "prescribed fire", "woodland"
+      ],
+      "keywords_expansion": [
+        "urban forestry", "tree canopy", "forest products", "timber harvesting",
+        "forest health", "invasive species", "carbon sequestration",
+        "forest restoration", "prescribed burning", "fire prevention",
+        "forest stewardship", "agroforestry"
+      ]
+    },
+    {
+      "id": "dacs_climate_agriculture",
+      "title": "Agricultural Resilience & Climate Adaptation",
+      "keywords_plan": [
+        "agricultural resilience", "climate adaptation", "drought", "flood",
+        "soil health", "conservation", "sustainable agriculture"
+      ],
+      "keywords_expansion": [
+        "cover crops", "soil conservation", "water conservation", "NRCS",
+        "conservation easement", "precision agriculture", "irrigation efficiency",
+        "organic farming", "regenerative agriculture", "carbon farming",
+        "climate-smart agriculture", "farm resilience"
+      ]
+    },
+    {
+      "id": "dacs_aquaculture",
+      "title": "Aquaculture & Seafood Industry",
+      "keywords_plan": [
+        "aquaculture", "shellfish", "seafood", "fisheries",
+        "fish farming", "mariculture", "coastal fishing"
+      ],
+      "keywords_expansion": [
+        "oyster farming", "shrimp aquaculture", "fish hatchery", "blue economy",
+        "commercial fishing", "seafood processing", "shellfish sanitation",
+        "water quality aquaculture", "coastal aquaculture", "finfish"
+      ]
+    }
+  ]
+}

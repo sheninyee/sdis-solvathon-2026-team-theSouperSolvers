@@ -1,0 +1,89 @@
+{
+  "account_id": "ncdmva",
+  "org_name": "NC Department of Military and Veterans Affairs",
+  "matching_units": [
+    {
+      "id": "dmva_veteran_services",
+      "title": "Veteran Benefits & Services Navigation",
+      "keywords_plan": [
+        "veteran services", "VA benefits", "veteran benefits", "claims assistance",
+        "veteran outreach", "veteran support", "benefits navigation", "service-connected"
+      ],
+      "keywords_expansion": [
+        "disability rating", "GI Bill", "veterans education", "veteran healthcare",
+        "VA claims", "accredited claims agent", "benefit counseling",
+        "veteran legal services", "dependency indemnity", "pension",
+        "veteran resource center", "VSO"
+      ]
+    },
+    {
+      "id": "dmva_veteran_employment",
+      "title": "Veteran Employment & Economic Opportunity",
+      "keywords_plan": [
+        "veteran employment", "job placement", "hiring veterans", "transition assistance",
+        "veteran careers", "employer partnerships", "skills translation"
+      ],
+      "keywords_expansion": [
+        "military to civilian", "TAP program", "veteran entrepreneur",
+        "small business veteran", "federal contractor", "VETS FIRST",
+        "apprenticeship", "veteran hiring preference", "military spouse employment",
+        "credentialing", "licensing reciprocity", "vocational rehabilitation"
+      ]
+    },
+    {
+      "id": "dmva_veteran_mental_health",
+      "title": "Veteran Mental Health & Wellness",
+      "keywords_plan": [
+        "mental health", "suicide prevention", "PTSD", "behavioral health",
+        "veteran wellness", "substance use", "crisis intervention"
+      ],
+      "keywords_expansion": [
+        "post-traumatic stress", "traumatic brain injury", "TBI",
+        "veteran peer support", "mental health counseling", "telehealth",
+        "veteran crisis line", "resilience program", "SAMHSA", "opioid",
+        "invisible wounds", "reintegration"
+      ]
+    },
+    {
+      "id": "dmva_veteran_housing",
+      "title": "Veteran Housing & Homelessness Prevention",
+      "keywords_plan": [
+        "veteran housing", "homeless veterans", "affordable housing",
+        "housing assistance", "HUD-VASH", "permanent supportive housing"
+      ],
+      "keywords_expansion": [
+        "veteran homelessness", "rapid rehousing", "transitional housing",
+        "housing voucher", "SSVF", "veteran shelter", "housing stability",
+        "rental assistance", "mortgage assistance", "foreclosure prevention"
+      ]
+    },
+    {
+      "id": "dmva_military_installations",
+      "title": "Military Installations & Economic Impact",
+      "keywords_plan": [
+        "military installation", "base support", "military community",
+        "defense industry", "military readiness", "installation resilience"
+      ],
+      "keywords_expansion": [
+        "BRAC", "encroachment", "compatible land use", "military construction",
+        "defense economic impact", "military family support", "garrison",
+        "joint land use study", "JLUS", "military compatible development",
+        "defense contractor", "installation energy"
+      ]
+    },
+    {
+      "id": "dmva_ng_emergency",
+      "title": "National Guard & Emergency Response",
+      "keywords_plan": [
+        "National Guard", "emergency response", "disaster response",
+        "emergency management", "homeland security", "civil support"
+      ],
+      "keywords_expansion": [
+        "natural disaster", "hurricane response", "flood response",
+        "emergency preparedness", "search and rescue", "FEMA",
+        "community resilience", "critical infrastructure", "continuity of operations",
+        "domestic operations", "CBRNE", "emergency coordination"
+      ]
+    }
+  ]
+}

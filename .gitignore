@@ -427,3 +427,17 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Python runtime
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# App runtime data (decisions, run logs, ephemeral accounts)
+data/sample/decisions_*/
+data/sample/runs_*.json
+data/sample/accounts/
+
+# Working / scratch directories
+"Claude outputs"/

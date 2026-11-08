@@ -1,0 +1,75 @@
+{
+  "account_id": "ncdps",
+  "org_name": "NC Department of Public Safety",
+  "matching_units": [
+    {
+      "id": "dps_emergency_mgmt",
+      "title": "Emergency Management & Disaster Recovery",
+      "keywords_plan": [
+        "emergency management", "disaster recovery", "FEMA", "hazard mitigation",
+        "emergency preparedness", "disaster response", "recovery programs"
+      ],
+      "keywords_expansion": [
+        "BRIC", "HMGP", "CDBG-DR", "public assistance", "individual assistance",
+        "disaster declaration", "emergency operations", "resilience planning",
+        "infrastructure resilience", "flood mitigation", "storm recovery",
+        "community resilience", "pre-disaster mitigation"
+      ]
+    },
+    {
+      "id": "dps_law_enforcement",
+      "title": "Law Enforcement & Public Safety",
+      "keywords_plan": [
+        "law enforcement", "public safety", "crime prevention", "community policing",
+        "violent crime", "officer training", "safety technology"
+      ],
+      "keywords_expansion": [
+        "Byrne JAG", "COPS grant", "community oriented policing", "crime reduction",
+        "body cameras", "evidence-based policing", "crime lab", "forensics",
+        "anti-violence", "gang prevention", "police reform",
+        "officer wellness", "criminal justice"
+      ]
+    },
+    {
+      "id": "dps_juvenile_justice",
+      "title": "Juvenile Justice & Youth Services",
+      "keywords_plan": [
+        "juvenile justice", "youth services", "juvenile rehabilitation",
+        "delinquency prevention", "youth intervention", "reentry"
+      ],
+      "keywords_expansion": [
+        "youth court", "diversion", "mentoring", "positive youth development",
+        "juvenile detention", "community supervision", "restorative justice",
+        "truancy prevention", "risk assessment", "juvenile reentry",
+        "school-based prevention", "youth violence prevention"
+      ]
+    },
+    {
+      "id": "dps_adult_correction",
+      "title": "Adult Correction & Reentry Services",
+      "keywords_plan": [
+        "reentry", "recidivism reduction", "correctional programs",
+        "rehabilitation", "job training incarcerated", "substance abuse treatment"
+      ],
+      "keywords_expansion": [
+        "Second Chance Act", "reentry housing", "employment reentry",
+        "prison education", "vocational training inmates",
+        "mental health treatment", "drug treatment court", "parole",
+        "probation services", "reintegration", "halfway house"
+      ]
+    },
+    {
+      "id": "dps_homeland_security",
+      "title": "Homeland Security & Infrastructure Protection",
+      "keywords_plan": [
+        "homeland security", "infrastructure protection", "terrorism prevention",
+        "SHSP", "UASI", "critical infrastructure", "threat assessment"
+      ],
+      "keywords_expansion": [
+        "HSGP", "port security", "transit security", "counter-terrorism",
+        "first responder", "emergency communications", "PSAP", "interoperability",
+        "fusion center", "suspicious activity reporting", "security training"
+      ]
+    }
+  ]
+}

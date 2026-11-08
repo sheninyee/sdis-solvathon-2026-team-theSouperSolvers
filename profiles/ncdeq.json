@@ -1,0 +1,97 @@
+{
+  "account_id": "ncdeq",
+  "org_name": "NC Department of Environmental Quality",
+  "matching_units": [
+    {
+      "id": "deq_clean_water",
+      "title": "Clean Water & Water Quality Protection",
+      "keywords_plan": [
+        "water quality", "clean water", "stormwater", "wastewater",
+        "drinking water", "groundwater", "water supply", "NPDES permit"
+      ],
+      "keywords_expansion": [
+        "watershed", "stream restoration", "nutrient reduction", "effluent",
+        "water infrastructure", "water system", "aquifer", "runoff",
+        "water treatment", "water utility", "source water protection"
+      ]
+    },
+    {
+      "id": "deq_air_quality",
+      "title": "Clean Air & Air Quality Management",
+      "keywords_plan": [
+        "air quality", "emissions", "ozone", "particulate matter",
+        "clean air", "air pollution", "greenhouse gas", "carbon"
+      ],
+      "keywords_expansion": [
+        "NOx", "PM2.5", "air monitoring", "emission reduction", "smog",
+        "mobile sources", "stationary sources", "permitting", "attainment",
+        "climate emissions", "carbon footprint", "net zero"
+      ]
+    },
+    {
+      "id": "deq_climate_resilience",
+      "title": "Climate Resilience & Adaptation",
+      "keywords_plan": [
+        "climate change", "resilience", "adaptation", "sea level rise",
+        "flooding", "extreme weather", "climate risk", "mitigation"
+      ],
+      "keywords_expansion": [
+        "coastal resilience", "flood mitigation", "storm surge", "drought",
+        "heat island", "green infrastructure", "nature-based solutions",
+        "carbon sequestration", "renewable energy", "clean energy transition"
+      ]
+    },
+    {
+      "id": "deq_land_remediation",
+      "title": "Land & Waste Management / Site Remediation",
+      "keywords_plan": [
+        "remediation", "cleanup", "contamination", "brownfield",
+        "hazardous waste", "solid waste", "landfill", "superfund"
+      ],
+      "keywords_expansion": [
+        "soil contamination", "underground storage tank", "coal ash",
+        "environmental cleanup", "waste reduction", "recycling",
+        "industrial waste", "RCRA", "underground tanks", "PFAS"
+      ]
+    },
+    {
+      "id": "deq_env_justice",
+      "title": "Environmental Justice & Community Health",
+      "keywords_plan": [
+        "environmental justice", "community health", "disadvantaged communities",
+        "underserved", "equity", "public health", "exposure reduction"
+      ],
+      "keywords_expansion": [
+        "overburdened communities", "cumulative impact", "frontline communities",
+        "health disparities", "low-income", "minority communities",
+        "vulnerable populations", "community engagement", "environmental burden"
+      ]
+    },
+    {
+      "id": "deq_coastal",
+      "title": "Coastal & Ocean Resource Management",
+      "keywords_plan": [
+        "coastal", "wetlands", "estuaries", "shoreline",
+        "coastal resilience", "dunes", "beach", "marine"
+      ],
+      "keywords_expansion": [
+        "coastal erosion", "living shoreline", "shellfish", "fisheries",
+        "CAMA permit", "coastal habitat", "tidal wetlands", "blue economy",
+        "ocean resources", "coastal flooding", "barrier island"
+      ]
+    },
+    {
+      "id": "deq_energy_transition",
+      "title": "Clean Energy & Energy Efficiency",
+      "keywords_plan": [
+        "clean energy", "renewable energy", "energy efficiency",
+        "solar", "wind", "electric vehicle", "grid modernization"
+      ],
+      "keywords_expansion": [
+        "battery storage", "EV charging", "energy storage", "photovoltaic",
+        "offshore wind", "green power", "net metering", "decarbonization",
+        "energy resilience", "low-carbon", "clean transportation"
+      ]
+    }
+  ]
+}

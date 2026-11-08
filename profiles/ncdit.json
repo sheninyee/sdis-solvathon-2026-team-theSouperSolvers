@@ -1,0 +1,87 @@
+{
+  "account_id": "ncdit",
+  "org_name": "NC Department of Information Technology",
+  "matching_units": [
+    {
+      "id": "dit_broadband",
+      "title": "Broadband Infrastructure & Digital Connectivity",
+      "keywords_plan": [
+        "broadband", "internet access", "connectivity", "digital infrastructure",
+        "last mile", "fiber optic", "wireless", "underserved areas"
+      ],
+      "keywords_expansion": [
+        "high-speed internet", "broadband expansion", "rural broadband",
+        "digital divide", "BEAD program", "fixed wireless", "middle mile",
+        "internet service provider", "gigabit", "broadband mapping",
+        "unserved", "underserved"
+      ]
+    },
+    {
+      "id": "dit_cybersecurity",
+      "title": "Cybersecurity & Information Security",
+      "keywords_plan": [
+        "cybersecurity", "information security", "cyber threat",
+        "data protection", "network security", "identity management"
+      ],
+      "keywords_expansion": [
+        "zero trust", "multi-factor authentication", "ransomware",
+        "incident response", "security operations center", "SOC",
+        "vulnerability management", "cyber resilience", "CISA",
+        "critical infrastructure protection", "threat intelligence",
+        "data breach", "cyber training"
+      ]
+    },
+    {
+      "id": "dit_digital_equity",
+      "title": "Digital Equity & Inclusion",
+      "keywords_plan": [
+        "digital equity", "digital inclusion", "digital literacy",
+        "technology access", "underserved communities", "digital skills"
+      ],
+      "keywords_expansion": [
+        "device access", "affordability", "low-income", "senior digital literacy",
+        "workforce digital skills", "library programs", "community anchor",
+        "digital navigator", "technology training", "computer access"
+      ]
+    },
+    {
+      "id": "dit_modernization",
+      "title": "IT Modernization & Enterprise Systems",
+      "keywords_plan": [
+        "IT modernization", "digital transformation", "cloud computing",
+        "enterprise systems", "legacy systems", "ERP", "data center"
+      ],
+      "keywords_expansion": [
+        "cloud migration", "SaaS", "platform modernization", "API",
+        "microservices", "automation", "process improvement", "SDLC",
+        "government technology", "GovTech", "digital services", "agile"
+      ]
+    },
+    {
+      "id": "dit_data_analytics",
+      "title": "Data Analytics & Open Government",
+      "keywords_plan": [
+        "data analytics", "open data", "data governance", "data sharing",
+        "performance management", "decision support", "data-driven"
+      ],
+      "keywords_expansion": [
+        "data warehouse", "business intelligence", "dashboard", "reporting",
+        "data quality", "interoperability", "AI governance", "machine learning",
+        "geospatial data", "public data", "transparency", "data standards"
+      ]
+    },
+    {
+      "id": "dit_workforce",
+      "title": "Technology Workforce Development",
+      "keywords_plan": [
+        "tech workforce", "STEM", "computer science education",
+        "IT training", "technology careers", "workforce pipeline"
+      ],
+      "keywords_expansion": [
+        "coding bootcamp", "apprenticeship", "tech talent", "K-12 CS",
+        "community college IT", "reskilling", "upskilling",
+        "computer science instruction", "technology education", "STEM pipeline"
+      ]
+    }
+  ]
+}

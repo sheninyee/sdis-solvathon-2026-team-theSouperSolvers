@@ -1,0 +1,62 @@
+{
+  "account_id": "ncoah",
+  "org_name": "NC Office of Administrative Hearings",
+  "matching_units": [
+    {
+      "id": "oah_dispute_resolution",
+      "title": "Administrative Dispute Resolution & Due Process",
+      "keywords_plan": [
+        "administrative hearings", "due process", "dispute resolution",
+        "contested cases", "administrative law", "adjudication"
+      ],
+      "keywords_expansion": [
+        "ALJ", "administrative law judge", "contested case hearing",
+        "agency appeal", "regulatory hearing", "mediation", "settlement",
+        "procedural fairness", "administrative remedy", "petition",
+        "notice and comment", "rulemaking"
+      ]
+    },
+    {
+      "id": "oah_civil_rights",
+      "title": "Civil Rights & Discrimination Complaints",
+      "keywords_plan": [
+        "civil rights", "discrimination", "equal opportunity",
+        "disability rights", "ADA", "workplace discrimination", "fair housing"
+      ],
+      "keywords_expansion": [
+        "Title VII", "ADEA", "ADA accommodation", "protected class",
+        "discriminatory practice", "hostile work environment",
+        "retaliation", "EEOC", "civil rights compliance", "disparate impact",
+        "accessibility", "reasonable accommodation"
+      ]
+    },
+    {
+      "id": "oah_access_justice",
+      "title": "Access to Justice & Language Services",
+      "keywords_plan": [
+        "access to justice", "language access", "interpreter services",
+        "translation", "legal aid", "public access", "self-represented"
+      ],
+      "keywords_expansion": [
+        "language barrier", "LEP", "limited English proficiency",
+        "court interpreter", "translated documents", "pro se litigant",
+        "legal services", "civil legal aid", "legal help", "navigators",
+        "plain language", "ADA compliance"
+      ]
+    },
+    {
+      "id": "oah_rulemaking",
+      "title": "State Rulemaking & Regulatory Process",
+      "keywords_plan": [
+        "rulemaking", "administrative rules", "regulatory process",
+        "public comment", "rule review", "agency regulations"
+      ],
+      "keywords_expansion": [
+        "North Carolina Register", "NC Administrative Code", "NCAC",
+        "temporary rule", "permanent rule", "RRC", "rules review commission",
+        "regulatory flexibility", "economic analysis of rules",
+        "public notice", "stakeholder input", "rule codification"
+      ]
+    }
+  ]
+}
