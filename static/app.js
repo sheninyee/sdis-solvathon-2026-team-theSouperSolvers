@@ -166,9 +166,9 @@ function renderList() {
     if (!cb) return;
     const id = cb.dataset.id;
     if (cb.checked) {
-      if (S.compareSet.size >= 2) {
+      if (S.compareSet.size >= 10) {
         cb.checked = false;
-        showToast("Select at most 2 grants to compare — uncheck one first");
+        showToast("Select at most 10 grants to compare — uncheck one first");
         return;
       }
       S.compareSet.add(id);
@@ -1075,30 +1075,24 @@ function updateCompareBtn() {
     btn.disabled = true;
   } else {
     btn.classList.remove("hidden");
-    btn.textContent = n === 2 ? "⊟ Compare (2)" : `Select ${2 - n} more…`;
-    btn.disabled = n !== 2;
+    btn.textContent = `⬇ Download (${n})`;
+    btn.disabled = false;
+    btn.title = `Download ${n} selected grant${n === 1 ? "" : "s"} as CSV`;
   }
 }
 
-// ── Comparison modal ───────────────────────────────────────────────────────
-function openCompareModal() {
-  const modal = document.getElementById("compare-modal");
-  if (!modal) return;
-  renderComparison();
-  modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-}
-function closeCompareModal() {
-  const modal = document.getElementById("compare-modal");
-  if (!modal) return;
-  modal.classList.add("hidden");
-  document.body.style.overflow = "";
-}
-
-function renderComparison() {
+// ── Compare / Download CSV ─────────────────────────────────────────────────
+function downloadCompareCSV() {
   const ids = [...S.compareSet];
   const grants = ids.map((id) => S.opportunities.find((o) => o.id === id)).filter(Boolean);
-  if (grants.length !== 2) return;
+  if (!grants.length) return;
+
+  function csvCell(val) {
+    if (val === null || val === undefined) return "";
+    const s = String(val);
+    if (s.includes(",") || s.includes('"') || s.includes("\n")) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  }
 
   function fmtAward(g) {
     const ceil = g.award_ceiling ?? g.max_award_usd;
@@ -1108,52 +1102,49 @@ function renderComparison() {
     return "not stated";
   }
 
-  const rows = [
-    ["Agency",      grants.map((g) => esc(g.funder || "not stated"))],
-    ["Score",       grants.map((g) => `<strong>${g.score ?? "—"}</strong> / 100`)],
-    ["Eligibility", grants.map((g) => `${g.score_breakdown?.eligibility ?? "—"}%`)],
-    ["Confidence",  grants.map((g) => confidenceBadge(g.confidence))],
-    ["Award",       grants.map((g) => fmtAward(g))],
-    ["Close date",  grants.map((g) => g.close_date ? `${esc(fmtDate(g.close_date))} (${g.days_to_close}d)` : "not stated")],
-    ["Status",      grants.map((g) => esc(g.status || "not stated"))],
-    ["Effort",      grants.map((g) => esc(g.effort?.level || "not stated"))],
-    ["Materials",   grants.map((g) => esc(appMaterials(g).slice(0, 3).join(", ")))],
-    ["Decision",    grants.map((g) => decisionBadge(g.id) || "—")],
+  const headers = [
+    "Title", "Agency / Funder", "Opportunity ID", "Score", "Eligibility %",
+    "Confidence", "Award Range", "Close Date", "Days to Close",
+    "Status", "Effort Level", "Materials Needed", "Decision", "URL"
   ];
 
-  const cols = grants
-    .map((g) => `<th><a class="compare-grant-link" href="#grant/${encodeURIComponent(g.id)}">${esc(g.title)}</a></th>`)
-    .join("");
-  const trs = rows
-    .map(([label, vals]) => `<tr><td>${label}</td>${vals.map((v) => `<td>${v}</td>`).join("")}</tr>`)
-    .join("");
+  const rows = grants.map((g) => {
+    const decObj = loadDecisions()[g.id];
+    return [
+      g.title,
+      g.funder || "not stated",
+      g.id,
+      g.score ?? "",
+      g.score_breakdown?.eligibility ?? "",
+      g.confidence || "",
+      fmtAward(g),
+      g.close_date ? fmtDate(g.close_date) : "not stated",
+      g.days_to_close ?? "",
+      g.status || "not stated",
+      g.effort?.level || "not stated",
+      appMaterials(g).join("; "),
+      decObj?.decision || "",
+      g.url || g.link || ""
+    ].map(csvCell);
+  });
 
-  document.getElementById("compare-modal-body").innerHTML = `
-    <table class="compare-table">
-      <thead><tr><th></th>${cols}</tr></thead>
-      <tbody>${trs}</tbody>
-    </table>
-    <div class="compare-actions">
-      <button class="btn-primary" id="cmp-open-0">Open: ${esc(grants[0].title.slice(0, 40))}${grants[0].title.length > 40 ? "…" : ""}</button>
-      <button class="btn-primary" id="cmp-open-1">Open: ${esc(grants[1].title.slice(0, 40))}${grants[1].title.length > 40 ? "…" : ""}</button>
-    </div>`;
-
-  document.getElementById("cmp-open-0").onclick = () => { selectOpportunity(grants[0].id); closeCompareModal(); };
-  document.getElementById("cmp-open-1").onclick = () => { selectOpportunity(grants[1].id); closeCompareModal(); };
+  const csvContent = [headers.map(csvCell).join(","), ...rows.map((r) => r.join(","))].join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.download = `grants-compare-${stamp}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast(`Downloaded ${grants.length} grant${grants.length === 1 ? "" : "s"} as CSV`);
 }
 
 function initCompare() {
   const btn = document.getElementById("compare-btn");
-  const modal = document.getElementById("compare-modal");
-  const closeBtn = document.getElementById("compare-modal-close");
-  if (btn) btn.addEventListener("click", openCompareModal);
-  if (closeBtn) closeBtn.addEventListener("click", closeCompareModal);
-  if (modal) {
-    modal.addEventListener("click", (e) => { if (e.target === modal) closeCompareModal(); });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !modal.classList.contains("hidden")) closeCompareModal();
-    });
-  }
+  if (btn) btn.addEventListener("click", downloadCompareCSV);
 }
 
 // ── Drag handles ───────────────────────────────────────────────────────────

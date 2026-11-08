@@ -18,7 +18,7 @@
   --amber: #e3a857;
 
   --header-h: 56px;
-  --left-w: 320px;
+  --left-w: 280px;
   --radius: 10px;
   --shadow: 0 2px 10px rgba(23,60,54,.10);
 }
@@ -107,7 +107,7 @@ body {
 .grants-half {
   display: flex;
   flex-direction: row;
-  flex: 1;
+  flex: 0 0 68%;
   overflow: hidden;
 }
 
@@ -947,8 +947,7 @@ details[open] summary { margin-bottom: 6px; }
 
 /* ════ COMPARE CHECKBOX ════ */
 .opp-item { position:relative; }
-.compare-cb-wrap { position:absolute; top:7px; right:7px; opacity:0; transition:opacity .12s; cursor:pointer; z-index:3; display:flex; align-items:center; }
-.opp-item:hover .compare-cb-wrap,.compare-cb-wrap:has(.compare-cb:checked) { opacity:1; }
+.compare-cb-wrap { position:absolute; top:7px; right:7px; opacity:1; transition:opacity .12s; cursor:pointer; z-index:3; display:flex; align-items:center; }
 .compare-cb { width:14px; height:14px; accent-color:var(--accent,#2d6a4f); cursor:pointer; }
 
 /* ════ COMPARE BUTTON ════ */
