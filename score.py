@@ -1,11 +1,12 @@
 """score.py — 5-signal scoring engine for Federal Funds Matchmaker.
 
 Signals and weights (must sum to 100):
-  semantic      45  — cosine similarity of embeddings (disabled w/o Azure OpenAI)
-  keyword       25  — TF-IDF overlap against NCDOT profile keywords
-  eligibility   15  — rule-based: state DOT eligible? match quality?
-  timing        10  — recency and urgency of deadline
-  funder_affinity 5 — known DOT/FHWA/FTA funder bonus
+  semantic               43  — cosine similarity of embeddings (disabled w/o Azure OpenAI)
+  keyword                24  — TF-IDF overlap against NCDOT profile keywords
+  eligibility            14  — rule-based: state DOT eligible? match quality?
+  timing                  9  — recency and urgency of deadline
+  funder_affinity         5  — known DOT/FHWA/FTA funder bonus
+  opportunity_attract     5  — award size (linear) + awardee count (binned), both capped at 100
 
 Output per opportunity: score 0-100, confidence (High/Medium/Low), matched_units[],
 score_breakdown{}, effort{level, hours_est, notes}.
@@ -24,11 +25,12 @@ from typing import Optional
 # ---------------------------------------------------------------------------
 # Weights
 # ---------------------------------------------------------------------------
-W_SEMANTIC   = 0.45
-W_KEYWORD    = 0.25
-W_ELIGIBILITY = 0.15
-W_TIMING     = 0.10
-W_FUNDER     = 0.05
+W_SEMANTIC    = 0.43
+W_KEYWORD     = 0.24
+W_ELIGIBILITY = 0.14
+W_TIMING      = 0.09
+W_FUNDER      = 0.05
+W_ATTRACT     = 0.05  # opportunity attractiveness: award size + awardee count
 
 # ---------------------------------------------------------------------------
 # Funder affinity table — bonus when funder string matches
@@ -301,6 +303,44 @@ def funder_affinity_score(funder: str) -> float:
             return val
     return 0.3  # unknown funder, low but nonzero
 
+# ---------------------------------------------------------------------------
+# Signal 6 — Opportunity attractiveness (award size + awardee count)
+# Award score:   0.00007 × avg_award_usd, capped at 100
+# Awardee score: binned 0/20/40/60/80/100 by number of expected awards
+# Combined:      sum of both, capped at 100, then normalised to 0–1.
+# ---------------------------------------------------------------------------
+_AWARDEE_BINS: list[tuple[int, int]] = [
+    (1,   0),
+    (10,  20),
+    (30,  40),
+    (50,  60),
+    (100, 80),
+]
+
+
+def opportunity_attractiveness_score(
+    avg_award_usd: Optional[float],
+    num_awards: Optional[int],
+) -> float:
+    """Return 0.0–1.0 reflecting award size and number of awardees."""
+    # Award-amount sub-score (linear, capped)
+    award_pts = 0.0
+    if avg_award_usd and avg_award_usd > 0:
+        award_pts = min(100.0, 0.00007 * avg_award_usd)
+
+    # Awardee-count sub-score (binned)
+    awardee_pts = 0.0
+    if num_awards is not None and num_awards > 0:
+        if num_awards > 100:
+            awardee_pts = 100.0
+        else:
+            for threshold, pts in reversed(_AWARDEE_BINS):
+                if num_awards > threshold:
+                    awardee_pts = pts
+                    break
+
+    return min(100.0, award_pts + awardee_pts) / 100.0
+
 
 # ---------------------------------------------------------------------------
 # Confidence label
@@ -398,6 +438,10 @@ def score_opportunity(
         opp.get("status", "posted"),
     )
     funder = funder_affinity_score(opp.get("funder", ""))
+    attract = opportunity_attractiveness_score(
+        opp.get("avg_award_usd") or opp.get("award_ceiling"),
+        opp.get("expected_number_of_awards") or opp.get("num_awards"),
+    )
 
     # In keyword_fallback mode, redistribute semantic weight to keyword
     if mode == "keyword_fallback" or sem == 0.0:
@@ -411,6 +455,7 @@ def score_opportunity(
         + elig * W_ELIGIBILITY
         + timing * W_TIMING
         + funder * W_FUNDER
+        + attract * W_ATTRACT
     )
 
     score = round(min(100, max(0, raw * 100)))
@@ -431,6 +476,7 @@ def score_opportunity(
             "eligibility": round(elig * W_ELIGIBILITY * 100),
             "timing": round(timing * W_TIMING * 100),
             "funder_affinity": round(funder * W_FUNDER * 100),
+            "opportunity_attractiveness": round(attract * W_ATTRACT * 100),
         },
         "effort": effort,
         "eligibility_verdict": elig_verdict,
