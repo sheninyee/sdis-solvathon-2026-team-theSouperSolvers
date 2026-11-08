@@ -1,0 +1,90 @@
+{
+  "account_id": "ncdpi",
+  "org_name": "NC Department of Public Instruction",
+  "matching_units": [
+    {
+      "id": "dpi_k12_equity",
+      "title": "K-12 Educational Equity & Achievement",
+      "keywords_plan": [
+        "educational equity", "achievement gap", "underserved students",
+        "Title I", "school improvement", "student outcomes", "academic achievement"
+      ],
+      "keywords_expansion": [
+        "low-income students", "minority students", "English learners",
+        "exceptional children", "IDEA", "special education", "early intervention",
+        "dropout prevention", "chronic absenteeism", "school turnaround",
+        "evidence-based intervention", "multi-tiered support"
+      ]
+    },
+    {
+      "id": "dpi_workforce_readiness",
+      "title": "Career & Technical Education / Workforce Readiness",
+      "keywords_plan": [
+        "career and technical education", "CTE", "workforce readiness",
+        "vocational education", "industry certifications", "work-based learning"
+      ],
+      "keywords_expansion": [
+        "Perkins V", "industry pathway", "STEM careers", "advanced manufacturing",
+        "health sciences pathway", "apprenticeship", "dual enrollment",
+        "career pathway", "job skills", "technical certification",
+        "cooperative education", "employer partnership"
+      ]
+    },
+    {
+      "id": "dpi_early_learning",
+      "title": "Early Childhood Education & School Readiness",
+      "keywords_plan": [
+        "early childhood", "pre-K", "kindergarten readiness", "school readiness",
+        "early learning", "child development", "Head Start"
+      ],
+      "keywords_expansion": [
+        "NC Pre-K", "childcare quality", "QRIS", "language development",
+        "early literacy", "early numeracy", "social-emotional learning",
+        "home visiting", "parent engagement", "early intervention",
+        "birth to five", "developmental screening"
+      ]
+    },
+    {
+      "id": "dpi_literacy",
+      "title": "Literacy & Reading Achievement",
+      "keywords_plan": [
+        "literacy", "reading", "phonics", "reading instruction",
+        "early literacy", "reading proficiency", "reading intervention"
+      ],
+      "keywords_expansion": [
+        "science of reading", "structured literacy", "dyslexia support",
+        "READ Act", "reading coach", "balanced literacy", "phonemic awareness",
+        "LETRS", "reading assessment", "third grade reading", "fluency",
+        "comprehension instruction", "reading specialist"
+      ]
+    },
+    {
+      "id": "dpi_school_safety",
+      "title": "School Safety & Mental Health",
+      "keywords_plan": [
+        "school safety", "student mental health", "school climate",
+        "social-emotional learning", "trauma-informed", "crisis response"
+      ],
+      "keywords_expansion": [
+        "school counselor", "PBIS", "restorative practices", "threat assessment",
+        "school-based mental health", "student wellness", "bullying prevention",
+        "safe schools", "school violence prevention", "STOP School Violence",
+        "mental health first aid", "substance abuse prevention"
+      ]
+    },
+    {
+      "id": "dpi_rural_education",
+      "title": "Rural Education & Educator Recruitment",
+      "keywords_plan": [
+        "rural schools", "rural education", "teacher recruitment",
+        "educator shortage", "teacher retention", "rural workforce"
+      ],
+      "keywords_expansion": [
+        "rural teacher pipeline", "loan forgiveness", "TEACH grants",
+        "rural school district", "small school", "low-wealth",
+        "educator preparation", "alternative licensure", "teacher housing",
+        "rural STEM", "broadband for schools", "E-rate"
+      ]
+    }
+  ]
+}

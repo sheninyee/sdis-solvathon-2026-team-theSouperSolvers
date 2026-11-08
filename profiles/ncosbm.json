@@ -1,0 +1,87 @@
+{
+  "account_id": "ncosbm",
+  "org_name": "NC Office of State Budget and Management",
+  "matching_units": [
+    {
+      "id": "osbm_budget_planning",
+      "title": "State Budget Planning & Fiscal Management",
+      "keywords_plan": [
+        "budget", "fiscal management", "state finance", "appropriations",
+        "budget planning", "revenue forecasting", "fiscal policy", "expenditure"
+      ],
+      "keywords_expansion": [
+        "general fund", "budget cycle", "budget request", "legislative budget",
+        "fiscal note", "budget execution", "allotment", "encumbrance",
+        "cost-benefit analysis", "budget transparency", "fund accounting",
+        "federal funds management", "state aid"
+      ]
+    },
+    {
+      "id": "osbm_performance_management",
+      "title": "Performance Management & Government Efficiency",
+      "keywords_plan": [
+        "performance management", "government efficiency", "results-based",
+        "outcome measurement", "program evaluation", "continuous improvement"
+      ],
+      "keywords_expansion": [
+        "KPI", "performance metrics", "government accountability",
+        "program review", "cost effectiveness", "benchmarking",
+        "strategic planning", "government innovation", "lean government",
+        "process improvement", "evidence-based policy", "evaluation"
+      ]
+    },
+    {
+      "id": "osbm_federal_grants",
+      "title": "Federal Grants Management & Compliance",
+      "keywords_plan": [
+        "federal grants", "grants management", "federal funding", "compliance",
+        "grant oversight", "federal reimbursement", "matching funds"
+      ],
+      "keywords_expansion": [
+        "2 CFR 200", "uniform guidance", "subrecipient monitoring", "audit",
+        "SEFA", "single audit", "federal award", "CFDA", "SAM.gov",
+        "grant closeout", "award management", "federal pass-through",
+        "cost allocation", "indirect cost rate"
+      ]
+    },
+    {
+      "id": "osbm_economic_analysis",
+      "title": "Economic Research & Revenue Forecasting",
+      "keywords_plan": [
+        "economic analysis", "revenue forecast", "economic development",
+        "tax policy", "economic impact", "demographic analysis"
+      ],
+      "keywords_expansion": [
+        "GDP", "employment projection", "population forecast", "economic model",
+        "revenue estimate", "consensus forecast", "economic indicators",
+        "income tax", "sales tax", "fiscal impact", "econometric analysis"
+      ]
+    },
+    {
+      "id": "osbm_data_transparency",
+      "title": "Data Transparency & Open Government",
+      "keywords_plan": [
+        "transparency", "open government", "public data", "government data",
+        "accountability", "public reporting", "financial reporting"
+      ],
+      "keywords_expansion": [
+        "open data portal", "financial dashboard", "budget transparency",
+        "public records", "FOIA", "government reporting", "CAFR",
+        "financial statements", "checkbook NC", "government performance reporting"
+      ]
+    },
+    {
+      "id": "osbm_capital_planning",
+      "title": "Capital Improvement Planning & Infrastructure Investment",
+      "keywords_plan": [
+        "capital improvement", "infrastructure investment", "capital budget",
+        "facilities planning", "deferred maintenance", "construction"
+      ],
+      "keywords_expansion": [
+        "CIP", "capital project", "state construction", "building renovation",
+        "infrastructure needs assessment", "asset management", "lifecycle cost",
+        "bond program", "facilities master plan", "public infrastructure"
+      ]
+    }
+  ]
+}

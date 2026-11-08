@@ -1,0 +1,90 @@
+{
+  "account_id": "ncdhhs",
+  "org_name": "NC Department of Health and Human Services",
+  "matching_units": [
+    {
+      "id": "dhhs_public_health",
+      "title": "Public Health & Disease Prevention",
+      "keywords_plan": [
+        "public health", "disease prevention", "health promotion",
+        "community health", "health equity", "population health", "immunization"
+      ],
+      "keywords_expansion": [
+        "CDC grants", "preventive care", "chronic disease", "communicable disease",
+        "opioid crisis", "substance use disorder", "tobacco prevention",
+        "obesity prevention", "health disparities", "social determinants",
+        "community health worker", "maternal health"
+      ]
+    },
+    {
+      "id": "dhhs_medicaid",
+      "title": "Medicaid & Health Coverage",
+      "keywords_plan": [
+        "Medicaid", "health coverage", "healthcare access", "uninsured",
+        "CHIP", "health insurance", "Medicaid expansion", "managed care"
+      ],
+      "keywords_expansion": [
+        "1115 waiver", "FQHC", "federally qualified health center",
+        "safety net", "rural health clinic", "behavioral health integration",
+        "value-based care", "care coordination", "telehealth reimbursement",
+        "children's health", "low-income health"
+      ]
+    },
+    {
+      "id": "dhhs_behavioral_health",
+      "title": "Behavioral Health & Substance Use Treatment",
+      "keywords_plan": [
+        "behavioral health", "mental health", "substance use disorder",
+        "addiction treatment", "crisis services", "psychiatric care"
+      ],
+      "keywords_expansion": [
+        "SAMHSA", "opioid treatment", "MAT", "medication-assisted treatment",
+        "community mental health", "inpatient psychiatric", "crisis stabilization",
+        "peer support specialist", "recovery housing", "co-occurring disorders",
+        "988 crisis line", "mobile crisis", "first episode psychosis"
+      ]
+    },
+    {
+      "id": "dhhs_child_welfare",
+      "title": "Child Welfare & Family Support",
+      "keywords_plan": [
+        "child welfare", "child protective services", "foster care",
+        "family support", "adoption", "child abuse prevention"
+      ],
+      "keywords_expansion": [
+        "Title IV-E", "foster youth", "kinship care", "reunification",
+        "family preservation", "TANF", "early intervention", "home visiting",
+        "child abuse reporting", "family resource center", "group home",
+        "independent living", "aging out foster care"
+      ]
+    },
+    {
+      "id": "dhhs_aging_disability",
+      "title": "Aging Services & Disability Support",
+      "keywords_plan": [
+        "aging services", "senior services", "disability services", "home care",
+        "long-term care", "independent living", "older adults"
+      ],
+      "keywords_expansion": [
+        "Older Americans Act", "Area Agency on Aging", "home and community-based",
+        "HCBS waiver", "caregiver support", "respite care", "nutrition programs",
+        "adult protective services", "nursing facility", "assistive technology",
+        "disability rights", "supported employment"
+      ]
+    },
+    {
+      "id": "dhhs_early_childhood",
+      "title": "Early Childhood Programs & Child Nutrition",
+      "keywords_plan": [
+        "early childhood", "childcare", "child nutrition", "WIC", "Head Start",
+        "child development", "school nutrition"
+      ],
+      "keywords_expansion": [
+        "CCDF", "childcare subsidy", "childcare licensing", "SNAP",
+        "food assistance", "hunger prevention", "food bank", "USDA nutrition",
+        "food insecurity", "school breakfast", "summer meals",
+        "afterschool nutrition", "emergency food"
+      ]
+    }
+  ]
+}

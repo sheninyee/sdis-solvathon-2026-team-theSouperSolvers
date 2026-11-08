@@ -1,0 +1,89 @@
+{
+  "account_id": "ncdol",
+  "org_name": "NC Department of Labor",
+  "matching_units": [
+    {
+      "id": "dol_workforce_dev",
+      "title": "Workforce Development & Job Training",
+      "keywords_plan": [
+        "workforce development", "job training", "skills training", "career readiness",
+        "vocational training", "occupational skills", "workforce pipeline"
+      ],
+      "keywords_expansion": [
+        "community college", "technical training", "credential program",
+        "job placement", "WIOA", "career pathways", "sector partnership",
+        "in-demand skills", "workforce system", "training grant",
+        "incumbent worker training", "skills gap"
+      ]
+    },
+    {
+      "id": "dol_apprenticeship",
+      "title": "Apprenticeship & Work-Based Learning",
+      "keywords_plan": [
+        "apprenticeship", "work-based learning", "registered apprenticeship",
+        "pre-apprenticeship", "on-the-job training", "paid training"
+      ],
+      "keywords_expansion": [
+        "journeyman", "trade apprenticeship", "employer-sponsored training",
+        "apprenticeship expansion", "RAPIDS", "construction apprenticeship",
+        "manufacturing apprenticeship", "tech apprenticeship",
+        "youth apprenticeship", "industry partnership", "earn and learn"
+      ]
+    },
+    {
+      "id": "dol_workplace_safety",
+      "title": "Workplace Safety & Health",
+      "keywords_plan": [
+        "workplace safety", "occupational safety", "OSHA", "injury prevention",
+        "worker health", "hazard reduction", "safety training"
+      ],
+      "keywords_expansion": [
+        "fatality prevention", "fall protection", "heat illness", "ergonomics",
+        "construction safety", "manufacturing safety", "agricultural safety",
+        "safety compliance", "consultation", "VPP", "safety culture",
+        "hazard communication", "worker compensation"
+      ]
+    },
+    {
+      "id": "dol_labor_standards",
+      "title": "Wage Standards & Worker Rights",
+      "keywords_plan": [
+        "wage standards", "labor law", "worker rights", "wage theft",
+        "minimum wage", "child labor", "labor compliance", "enforcement"
+      ],
+      "keywords_expansion": [
+        "wage investigation", "unpaid wages", "overtime", "FLSA",
+        "labor enforcement", "worker exploitation", "domestic worker",
+        "labor trafficking", "employee rights", "labor standards compliance"
+      ]
+    },
+    {
+      "id": "dol_young_workers",
+      "title": "Youth Employment & Opportunity",
+      "keywords_plan": [
+        "youth employment", "young workers", "summer youth", "teen workers",
+        "youth career", "youth workforce", "school-to-career"
+      ],
+      "keywords_expansion": [
+        "work permits", "TANF youth", "out-of-school youth", "opportunity youth",
+        "youth apprenticeship", "summer jobs", "internship", "co-op",
+        "career exploration", "career and technical education", "CTE",
+        "YOUTHBUILD", "job corps"
+      ]
+    },
+    {
+      "id": "dol_labor_market",
+      "title": "Labor Market Information & Economic Research",
+      "keywords_plan": [
+        "labor market", "employment data", "economic analysis", "workforce data",
+        "occupational projections", "employer surveys", "wage data"
+      ],
+      "keywords_expansion": [
+        "unemployment rate", "job openings", "labor force", "industry employment",
+        "LAUS", "QCEW", "occupational employment statistics", "BLS",
+        "regional economy", "workforce planning", "employer demand",
+        "skills demand", "labor market transparency"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "account_id": "guest",
+  "org_name": "North Carolina State Government",
+  "display_name": "NC State Government (Guest)",
+  "type": "state_government",
+  "profile_review_status": "curated",
+  "priority": "balanced",
+  "applicant_types": [
+    "State governments",
+    "State government",
+    "State agencies",
+    "Units of general local government",
+    "County governments",
+    "City or township governments",
+    "Special district governments",
+    "Public and State controlled institutions of higher education",
+    "Native American tribal governments",
+    "Nonprofits"
+  ],
+  "matching_units": [
+    {
+      "id": "transportation_infrastructure",
+      "title": "Transportation & Infrastructure",
+      "keywords_plan": [
+        "highway", "road", "bridge", "transit", "transportation",
+        "infrastructure", "pavement", "corridor", "safety", "mobility"
+      ],
+      "keywords_expansion": [
+        "NCDOT", "FHWA", "FTA", "multimodal", "freight", "rail",
+        "pedestrian", "bicycle", "vision zero", "complete streets",
+        "congestion", "traffic", "vehicle miles", "DOT", "STIP"
+      ]
+    },
+    {
+      "id": "public_health_human_services",
+      "title": "Public Health & Human Services",
+      "keywords_plan": [
+        "public health", "mental health", "substance abuse", "opioid",
+        "behavioral health", "Medicaid", "SNAP", "food assistance", "nutrition"
+      ],
+      "keywords_expansion": [
+        "DHHS", "CDC", "SAMHSA", "social services", "child welfare",
+        "foster care", "elderly", "disability", "workforce", "prevention",
+        "clinical", "community health", "health equity", "telehealth"
+      ]
+    },
+    {
+      "id": "education_workforce",
+      "title": "Education & Workforce Development",
+      "keywords_plan": [
+        "education", "workforce", "job training", "community college",
+        "K-12", "early childhood", "STEM", "apprenticeship", "literacy"
+      ],
+      "keywords_expansion": [
+        "DPI", "NCCU", "UNC", "career readiness", "credential",
+        "adult education", "reentry", "Title I", "Head Start",
+        "childcare", "after-school", "higher education", "Perkins"
+      ]
+    },
+    {
+      "id": "environment_energy",
+      "title": "Environment, Energy & Natural Resources",
+      "keywords_plan": [
+        "environment", "clean water", "wastewater", "stormwater",
+        "clean energy", "renewable", "climate", "resilience", "flood"
+      ],
+      "keywords_expansion": [
+        "NCDEQ", "EPA", "USDA", "solar", "EV", "electric vehicle",
+        "drinking water", "PFAS", "brownfield", "wetlands", "coastal",
+        "emissions", "carbon", "FEMA", "hazard mitigation", "storm"
+      ]
+    },
+    {
+      "id": "public_safety_justice",
+      "title": "Public Safety & Criminal Justice",
+      "keywords_plan": [
+        "public safety", "law enforcement", "fire", "emergency management",
+        "911", "reentry", "juvenile", "violence", "domestic violence"
+      ],
+      "keywords_expansion": [
+        "NCDPS", "VOCA", "STOP", "Byrne JAG", "COPS", "first responder",
+        "EMS", "homeland security", "dispatcher", "corrections",
+        "probation", "community supervision", "crime prevention"
+      ]
+    },
+    {
+      "id": "economic_development",
+      "title": "Economic Development & Rural Communities",
+      "keywords_plan": [
+        "economic development", "rural", "small business", "broadband",
+        "housing", "workforce housing", "CDBG", "community development"
+      ],
+      "keywords_expansion": [
+        "NCDOC", "USDA rural", "EDA", "HUD", "opportunity zone",
+        "revitalization", "Main Street", "agriculture", "farm",
+        "food systems", "job creation", "manufacturing", "tourism"
+      ]
+    },
+    {
+      "id": "technology_digital_govt",
+      "title": "Technology & Digital Government",
+      "keywords_plan": [
+        "broadband", "digital equity", "cybersecurity", "data",
+        "technology", "IT modernization", "open government", "AI"
+      ],
+      "keywords_expansion": [
+        "NCDIT", "FCC", "BEAD", "ConnectNC", "fiber", "last mile",
+        "access gap", "digital divide", "cloud", "interoperability",
+        "GIS", "data sharing", "smart city", "privacy"
+      ]
+    },
+    {
+      "id": "agriculture_food",
+      "title": "Agriculture & Food Systems",
+      "keywords_plan": [
+        "agriculture", "farm", "food", "rural", "soil", "water quality",
+        "conservation", "USDA", "crop", "livestock", "forestry"
+      ],
+      "keywords_expansion": [
+        "NCDA&CS", "NRCS", "FSA", "FNS", "specialty crops", "organic",
+        "food bank", "hunger", "food desert", "farm-to-school",
+        "agribusiness", "cooperative extension", "tobacco", "swine"
+      ]
+    }
+  ]
+}
