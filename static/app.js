@@ -13,6 +13,7 @@ const S = {
   profile: {},         // unit_id → {title, keywords[]} from /api/profile
   mainTab: "grants",   // "grants" | "project"
   pmResult: null,      // last project-match result
+  compareSet: new Set(),  // up to 2 grant IDs for side-by-side
   pmLoading: false,
 };
 
@@ -147,10 +148,34 @@ function renderList() {
     if (el) el.classList.add("selected");
   }
 
+  // Restore compare checkbox state
+  S.compareSet.forEach((id) => {
+    const cb = list.querySelector(`.compare-cb[data-id="${id}"]`);
+    if (cb) cb.checked = true;
+  });
+
   list.onclick = (e) => {
+    if (e.target.closest(".compare-cb-wrap")) return;
     const li = e.target.closest("[data-id]");
     if (!li) return;
     selectOpportunity(li.dataset.id);
+  };
+
+  list.onchange = (e) => {
+    const cb = e.target.closest(".compare-cb");
+    if (!cb) return;
+    const id = cb.dataset.id;
+    if (cb.checked) {
+      if (S.compareSet.size >= 2) {
+        cb.checked = false;
+        showToast("Select at most 2 grants to compare — uncheck one first");
+        return;
+      }
+      S.compareSet.add(id);
+    } else {
+      S.compareSet.delete(id);
+    }
+    updateCompareBtn();
   };
 
   // Sample data banner
@@ -226,6 +251,7 @@ function decisionBadge(oppId) {
 
 function oppRow(opp, rank) {
   return `<li class="opp-item" data-id="${esc(opp.id)}" role="option" aria-selected="false" tabindex="0">
+    <label class="compare-cb-wrap" title="Add to compare" onclick="event.stopPropagation()"><input type="checkbox" class="compare-cb" data-id="${esc(opp.id)}"></label>
     <span class="opp-rank">${rank}</span>
     <div class="score-ring-wrap">${scoreRing(opp.score, 52)}</div>
     <div class="opp-body">
@@ -251,7 +277,10 @@ function selectOpportunity(id) {
     el.setAttribute("aria-selected", el.dataset.id === id);
   });
   const opp = S.opportunities.find((o) => o.id === id);
-  if (opp) renderDetail(opp);
+  if (opp) {
+    renderDetail(opp);
+    if (history.replaceState) history.replaceState(null, "", "#grant/" + encodeURIComponent(id));
+  }
 }
 
 
@@ -648,6 +677,18 @@ async function init() {
   await Promise.all([loadOpportunities(), loadDecisions(), loadProfile()]);
   renderList();
 
+  // Deep-link: open grant from URL hash
+  const hashMatch = window.location.hash.match(/^#grant\/(.+)$/);
+  if (hashMatch) {
+    const targetId = decodeURIComponent(hashMatch[1]);
+    const target = S.opportunities.find((o) => o.id === targetId);
+    if (target) {
+      const el = document.querySelector(`[data-id="${targetId}"]`);
+      if (el) el.scrollIntoView({ block: "nearest" });
+      selectOpportunity(targetId);
+      return;
+    }
+  }
   // Auto-select rank #1
   const first = applyFilters()[0];
   if (first) selectOpportunity(first.id);
@@ -1017,9 +1058,198 @@ function initProfileModal() {
   });
 }
 
+
+// ── Hash-change deep-link listener ────────────────────────────────────────
+window.addEventListener("hashchange", () => {
+  const m = window.location.hash.match(/^#grant\/(.+)$/);
+  if (m) selectOpportunity(decodeURIComponent(m[1]));
+});
+
+// ── Compare button state ───────────────────────────────────────────────────
+function updateCompareBtn() {
+  const btn = document.getElementById("compare-btn");
+  if (!btn) return;
+  const n = S.compareSet.size;
+  if (n === 0) {
+    btn.classList.add("hidden");
+    btn.disabled = true;
+  } else {
+    btn.classList.remove("hidden");
+    btn.textContent = n === 2 ? "⊟ Compare (2)" : `Select ${2 - n} more…`;
+    btn.disabled = n !== 2;
+  }
+}
+
+// ── Comparison modal ───────────────────────────────────────────────────────
+function openCompareModal() {
+  const modal = document.getElementById("compare-modal");
+  if (!modal) return;
+  renderComparison();
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+function closeCompareModal() {
+  const modal = document.getElementById("compare-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function renderComparison() {
+  const ids = [...S.compareSet];
+  const grants = ids.map((id) => S.opportunities.find((o) => o.id === id)).filter(Boolean);
+  if (grants.length !== 2) return;
+
+  function fmtAward(g) {
+    const ceil = g.award_ceiling ?? g.max_award_usd;
+    const floor = g.award_floor;
+    if (ceil && floor && floor !== ceil) return `${fmtDollars(floor)} – ${fmtDollars(ceil)}`;
+    if (ceil) return `Up to ${fmtDollars(ceil)}`;
+    return "not stated";
+  }
+
+  const rows = [
+    ["Agency",      grants.map((g) => esc(g.funder || "not stated"))],
+    ["Score",       grants.map((g) => `<strong>${g.score ?? "—"}</strong> / 100`)],
+    ["Eligibility", grants.map((g) => `${g.score_breakdown?.eligibility ?? "—"}%`)],
+    ["Confidence",  grants.map((g) => confidenceBadge(g.confidence))],
+    ["Award",       grants.map((g) => fmtAward(g))],
+    ["Close date",  grants.map((g) => g.close_date ? `${esc(fmtDate(g.close_date))} (${g.days_to_close}d)` : "not stated")],
+    ["Status",      grants.map((g) => esc(g.status || "not stated"))],
+    ["Effort",      grants.map((g) => esc(g.effort?.level || "not stated"))],
+    ["Materials",   grants.map((g) => esc(appMaterials(g).slice(0, 3).join(", ")))],
+    ["Decision",    grants.map((g) => decisionBadge(g.id) || "—")],
+  ];
+
+  const cols = grants
+    .map((g) => `<th><a class="compare-grant-link" href="#grant/${encodeURIComponent(g.id)}">${esc(g.title)}</a></th>`)
+    .join("");
+  const trs = rows
+    .map(([label, vals]) => `<tr><td>${label}</td>${vals.map((v) => `<td>${v}</td>`).join("")}</tr>`)
+    .join("");
+
+  document.getElementById("compare-modal-body").innerHTML = `
+    <table class="compare-table">
+      <thead><tr><th></th>${cols}</tr></thead>
+      <tbody>${trs}</tbody>
+    </table>
+    <div class="compare-actions">
+      <button class="btn-primary" id="cmp-open-0">Open: ${esc(grants[0].title.slice(0, 40))}${grants[0].title.length > 40 ? "…" : ""}</button>
+      <button class="btn-primary" id="cmp-open-1">Open: ${esc(grants[1].title.slice(0, 40))}${grants[1].title.length > 40 ? "…" : ""}</button>
+    </div>`;
+
+  document.getElementById("cmp-open-0").onclick = () => { selectOpportunity(grants[0].id); closeCompareModal(); };
+  document.getElementById("cmp-open-1").onclick = () => { selectOpportunity(grants[1].id); closeCompareModal(); };
+}
+
+function initCompare() {
+  const btn = document.getElementById("compare-btn");
+  const modal = document.getElementById("compare-modal");
+  const closeBtn = document.getElementById("compare-modal-close");
+  if (btn) btn.addEventListener("click", openCompareModal);
+  if (closeBtn) closeBtn.addEventListener("click", closeCompareModal);
+  if (modal) {
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeCompareModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) closeCompareModal();
+    });
+  }
+}
+
+// ── Drag handles ───────────────────────────────────────────────────────────
+function makeDraggable(handle, onMove, onDone) {
+  if (!handle) return;
+  let startX = 0;
+  let lastVal = null;
+
+  function move(clientX) {
+    const dx = clientX - startX;
+    startX = clientX;
+    lastVal = onMove(dx);
+  }
+
+  function stop() {
+    document.body.style.userSelect = "";
+    document.body.style.cursor = "";
+    handle.classList.remove("is-dragging");
+    document.removeEventListener("mousemove", onMM);
+    document.removeEventListener("mouseup", stop);
+    document.removeEventListener("touchmove", onTM);
+    document.removeEventListener("touchend", stop);
+    if (lastVal != null) onDone(lastVal);
+  }
+
+  function onMM(e) { move(e.clientX); }
+  function onTM(e) { e.preventDefault(); move(e.touches[0].clientX); }
+
+  function start(clientX) {
+    startX = clientX;
+    lastVal = null;
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
+    handle.classList.add("is-dragging");
+    document.addEventListener("mousemove", onMM);
+    document.addEventListener("mouseup", stop);
+    document.addEventListener("touchmove", onTM, { passive: false });
+    document.addEventListener("touchend", stop);
+  }
+
+  handle.addEventListener("mousedown", (e) => { e.preventDefault(); start(e.clientX); });
+  handle.addEventListener("touchstart", (e) => { e.preventDefault(); start(e.touches[0].clientX); }, { passive: false });
+}
+
+function initDragHandles() {
+  const MIN_SIDEBAR = 180;
+  const MIN_PM      = 240;
+
+  const grantsHalf = document.querySelector(".grants-half");
+  const pmHalf     = document.querySelector(".pm-half");
+  const leftPanel  = document.querySelector(".left-panel");
+
+  // Restore saved widths from previous session
+  const savedLeftW   = localStorage.getItem("ffm-left-w");
+  const savedGrantsW = localStorage.getItem("ffm-grants-w");
+  if (savedLeftW) document.documentElement.style.setProperty("--left-w", savedLeftW);
+  if (savedGrantsW && grantsHalf && pmHalf) {
+    grantsHalf.style.flex = "none";
+    grantsHalf.style.width = savedGrantsW;
+    pmHalf.style.flex = "1";
+  }
+
+  // Handle 1: sidebar ↔ detail panel
+  makeDraggable(
+    document.getElementById("drag-inner"),
+    (dx) => {
+      if (!leftPanel) return null;
+      const cur = leftPanel.getBoundingClientRect().width;
+      const next = Math.max(MIN_SIDEBAR, cur + dx);
+      document.documentElement.style.setProperty("--left-w", next + "px");
+      return next + "px";
+    },
+    (val) => localStorage.setItem("ffm-left-w", val)
+  );
+
+  // Handle 2: grants half ↔ PM half
+  makeDraggable(
+    document.getElementById("drag-outer"),
+    (dx) => {
+      if (!grantsHalf || !pmHalf) return null;
+      const totalW = document.querySelector(".app-layout").getBoundingClientRect().width;
+      const curW   = grantsHalf.getBoundingClientRect().width;
+      const nextW  = Math.max(400, Math.min(totalW - MIN_PM, curW + dx));
+      grantsHalf.style.flex = "none";
+      grantsHalf.style.width = nextW + "px";
+      pmHalf.style.flex = "1";
+      return nextW + "px";
+    },
+    (val) => localStorage.setItem("ffm-grants-w", val)
+  );
+}
 initHowModal();
 initCreateAccountModal();
 initProfileModal();
+initCompare();
+initDragHandles();
 initRefreshBtn();
 initAccountMenu();
 initFilters();

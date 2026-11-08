@@ -102,6 +102,7 @@
           <option value="close_date">Due date ↑</option>
           <option value="undecided">Undecided first</option>
         </select>
+        <button id="compare-btn" class="compare-btn hidden" title="Compare 2 selected grants">⊟ Compare</button>
       </div>
     </div>
 
@@ -115,6 +116,8 @@
 
   </aside>
 
+  <div class="drag-handle drag-handle--inner" id="drag-inner" role="separator" aria-orientation="vertical" title="Drag to resize panels"></div>
+
   <!-- RIGHT PANEL: detail -->
   <main class="detail-panel" id="detail-panel" role="main">
     <div class="detail-empty" id="detail-empty">
@@ -126,6 +129,8 @@
   </main>
 
   </div><!-- end .grants-half -->
+
+  <div class="drag-handle drag-handle--outer" id="drag-outer" role="separator" aria-orientation="vertical" title="Drag to resize panels"></div>
 
   <!-- ══════ RIGHT HALF: Project Match (always visible) ══════ -->
   <div class="pm-half">
@@ -285,6 +290,7 @@
   </div>
 </div>
 
+<div id="compare-modal" class="compare-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="compare-modal-title"><div class="compare-modal-box"><div class="compare-modal-header"><h2 id="compare-modal-title">Grant Comparison</h2><button class="how-modal-close" id="compare-modal-close" aria-label="Close">&#x2715;</button></div><div class="compare-modal-body" id="compare-modal-body"></div></div></div>
 <script src="/static/app.js"></script>
 </body>
 </html>
