@@ -1,0 +1,398 @@
+{
+  "account_id": "ncdot",
+  "display_name": "NC Department of Transportation",
+  "type": "department",
+  "applicant_types": [
+    "State governments",
+    "State government"
+  ],
+  "review": {
+    "status": "ai-draft",
+    "note": "Drafted from NCDOT Strategic Plan 2025-2029. Human review and sign-off required before scoring results are trusted."
+  },
+  "scope_notes": "NCDOT manages NC's transportation network: highways, bridges, transit, rail, aviation, bicycle and pedestrian facilities. DMV-related items (licensing, vehicle registration) should be capped at Medium confidence until NCDMV's own plan is added.",
+  "matching_units": [
+    {
+      "id": "G1-O1",
+      "title": "Improve safety for all transportation users",
+      "summary": "Reduce fatal and serious injury crashes, improve work zone safety, and address high-risk road segments. NCDOT leads Vision Zero-aligned programs.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 1 \u2014 Safety",
+      "keywords_plan": [
+        "safety",
+        "crash reduction",
+        "fatality",
+        "serious injury",
+        "work zone",
+        "high-risk road",
+        "roadway departure",
+        "pedestrian safety",
+        "bicycle safety"
+      ],
+      "keywords_expansion": [
+        "HSIP",
+        "highway safety improvement program",
+        "Vision Zero",
+        "Safe System",
+        "SS4A",
+        "speed management",
+        "road diet",
+        "engineering countermeasure"
+      ]
+    },
+    {
+      "id": "G2-O1",
+      "title": "Preserve and maintain infrastructure assets",
+      "summary": "Maintain bridges, pavements, culverts and other transportation assets in good condition to avoid costly replacements. Prioritize asset management and state of good repair.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 2 \u2014 Infrastructure",
+      "keywords_plan": [
+        "bridge",
+        "pavement",
+        "preservation",
+        "maintenance",
+        "asset management",
+        "condition",
+        "repair",
+        "culvert",
+        "rehabilitation",
+        "resurfacing"
+      ],
+      "keywords_expansion": [
+        "BIP",
+        "bridge investment program",
+        "IIJA infrastructure",
+        "state of good repair",
+        "TAMP",
+        "life cycle cost",
+        "bridge replacement",
+        "bridge rehabilitation"
+      ]
+    },
+    {
+      "id": "G2-O2",
+      "title": "Modernize and expand transportation infrastructure",
+      "summary": "Build new capacity, improve interchanges, widen key corridors, and address system bottlenecks to support NC's growth.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 2 \u2014 Infrastructure",
+      "keywords_plan": [
+        "capacity",
+        "expansion",
+        "interchange",
+        "corridor",
+        "bottleneck",
+        "construction",
+        "widening",
+        "new highway",
+        "expressway"
+      ],
+      "keywords_expansion": [
+        "INFRA grant",
+        "BUILD grant",
+        "RAISE grant",
+        "highway",
+        "freeway",
+        "new construction",
+        "MEGAPROJECTS"
+      ]
+    },
+    {
+      "id": "G3-O1",
+      "title": "Reduce congestion and improve mobility",
+      "summary": "Improve travel time reliability and reduce congestion on key corridors through operational improvements, ITS, and demand management.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 3 \u2014 Mobility",
+      "keywords_plan": [
+        "congestion",
+        "mobility",
+        "travel time reliability",
+        "traffic operations",
+        "ITS",
+        "signal timing",
+        "demand management"
+      ],
+      "keywords_expansion": [
+        "intelligent transportation system",
+        "ATMS",
+        "connected vehicles",
+        "traffic management center",
+        "ATCMTD",
+        "V2X",
+        "smart corridor"
+      ]
+    },
+    {
+      "id": "G3-O2",
+      "title": "Expand multimodal transportation options",
+      "summary": "Increase access to transit, passenger rail, bicycle, pedestrian, and micromobility options to serve all users and reduce car dependency.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 3 \u2014 Mobility",
+      "keywords_plan": [
+        "transit",
+        "rail",
+        "bicycle",
+        "pedestrian",
+        "multimodal",
+        "active transportation",
+        "bus",
+        "micromobility",
+        "first mile last mile"
+      ],
+      "keywords_expansion": [
+        "FTA",
+        "Amtrak",
+        "CRISI",
+        "Safe Streets",
+        "complete streets",
+        "greenway",
+        "trail",
+        "passenger rail",
+        "intercity bus",
+        "RAISE multimodal"
+      ]
+    },
+    {
+      "id": "G3-O3",
+      "title": "Operate and maintain our system efficiently",
+      "summary": "Maximize value and efficiency of existing assets through data-driven operations, performance measurement, and technology.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 3 \u2014 Mobility",
+      "keywords_plan": [
+        "operations",
+        "efficiency",
+        "data analytics",
+        "performance measurement",
+        "system management",
+        "technology deployment"
+      ],
+      "keywords_expansion": [
+        "asset management",
+        "performance measures",
+        "optimization",
+        "digital twin",
+        "TAMP",
+        "data platform",
+        "real-time operations"
+      ]
+    },
+    {
+      "id": "G4-O1",
+      "title": "Support economic development and freight movement",
+      "summary": "Improve freight corridors, port and airport access, and transportation connections to support NC's economy and global competitiveness.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Goal 4 \u2014 Economy",
+      "keywords_plan": [
+        "freight",
+        "economic development",
+        "port",
+        "airport",
+        "commerce",
+        "industry",
+        "logistics",
+        "supply chain",
+        "intermodal"
+      ],
+      "keywords_expansion": [
+        "INFRA freight",
+        "port access",
+        "last mile freight",
+        "industrial park",
+        "truck",
+        "rail freight",
+        "air cargo",
+        "RAISE economic"
+      ]
+    },
+    {
+      "id": "T1",
+      "title": "Environmental stewardship and climate resilience",
+      "summary": "Address climate change impacts on transportation infrastructure, reduce vehicle emissions, and protect natural resources.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 1",
+      "keywords_plan": [
+        "climate resilience",
+        "environment",
+        "emissions",
+        "sustainability",
+        "EV",
+        "electric vehicle",
+        "charging",
+        "carbon",
+        "flood",
+        "resilience"
+      ],
+      "keywords_expansion": [
+        "PROTECT",
+        "carbon reduction program",
+        "clean transportation",
+        "EV charging infrastructure",
+        "RAISE resilience",
+        "environmental justice",
+        "natural hazard"
+      ]
+    },
+    {
+      "id": "T2",
+      "title": "Equity and community connectivity",
+      "summary": "Ensure transportation investments serve all communities, including rural, low-income, tribal, and historically underserved populations.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 2",
+      "keywords_plan": [
+        "equity",
+        "rural",
+        "underserved",
+        "community",
+        "access",
+        "low-income",
+        "disadvantaged",
+        "tribal",
+        "environmental justice"
+      ],
+      "keywords_expansion": [
+        "EJ community",
+        "rural transportation",
+        "RAISE equity",
+        "RTP",
+        "community connectivity",
+        "affordable access",
+        "Title VI"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Technology and innovation",
+      "summary": "Deploy emerging technologies such as connected/autonomous vehicles, smart infrastructure, and advanced data analytics.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 3",
+      "keywords_plan": [
+        "technology",
+        "innovation",
+        "autonomous vehicle",
+        "connected vehicle",
+        "smart infrastructure",
+        "data",
+        "digital",
+        "AI",
+        "automation"
+      ],
+      "keywords_expansion": [
+        "AV",
+        "CAV",
+        "ATCMTD",
+        "smart corridor",
+        "IoT",
+        "5G",
+        "digital twin",
+        "sensor",
+        "V2I",
+        "V2X"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Workforce development and organizational excellence",
+      "summary": "Build NCDOT's workforce capacity, partner with educational institutions, and attract transportation professionals.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 4",
+      "keywords_plan": [
+        "workforce",
+        "training",
+        "education",
+        "career",
+        "talent pipeline",
+        "professional development",
+        "apprenticeship"
+      ],
+      "keywords_expansion": [
+        "STEM",
+        "university partnership",
+        "technical college",
+        "workforce development grant",
+        "internship",
+        "recruitment"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Safety culture and Vision Zero",
+      "summary": "Embed safety in all NCDOT decisions and programs, with a long-term goal of zero transportation fatalities and serious injuries.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 5",
+      "keywords_plan": [
+        "Vision Zero",
+        "safety culture",
+        "fatality",
+        "serious injury",
+        "road diet",
+        "speed management",
+        "safe system approach"
+      ],
+      "keywords_expansion": [
+        "SS4A",
+        "Safe System",
+        "speed",
+        "engineering countermeasures",
+        "behavioral safety",
+        "impaired driving",
+        "distracted driving"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Rural and small community transportation",
+      "summary": "Address the unique transportation needs of rural communities and small towns across North Carolina.",
+      "cite": "NCDOT Strategic Plan 2025-2029, Priority Theme 6",
+      "keywords_plan": [
+        "rural",
+        "small community",
+        "rural transit",
+        "rural road",
+        "access to services",
+        "rural connectivity"
+      ],
+      "keywords_expansion": [
+        "RTAP",
+        "FTA rural 5311",
+        "rural highway",
+        "small town",
+        "remote area",
+        "rural broadband transport",
+        "volunteer driver"
+      ]
+    }
+  ],
+  "search_seeds": {
+    "keyword_sets": [
+      [
+        "bridge",
+        "highway",
+        "infrastructure",
+        "transportation",
+        "DOT"
+      ],
+      [
+        "transit",
+        "rail",
+        "multimodal",
+        "bicycle",
+        "pedestrian"
+      ],
+      [
+        "safety",
+        "crash",
+        "fatality",
+        "road safety",
+        "HSIP"
+      ],
+      [
+        "freight",
+        "port",
+        "airport",
+        "economic development",
+        "logistics"
+      ],
+      [
+        "EV",
+        "electric vehicle",
+        "charging",
+        "clean transportation",
+        "climate"
+      ],
+      [
+        "rural",
+        "underserved",
+        "equity",
+        "community access",
+        "environmental justice"
+      ]
+    ]
+  }
+}

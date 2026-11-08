@@ -1,0 +1,9 @@
+{
+  "account_id": "ncdot",
+  "display_name": "NC Dept of Transportation",
+  "type": "department",
+  "owner_user_id": "demo",
+  "created_at": "2026-11-07T00:00:00Z",
+  "profile_status": "ai-draft",
+  "status": "active"
+}

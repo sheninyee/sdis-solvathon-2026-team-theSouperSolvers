@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Federal Funds Matchmaker</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="site-header">
+  <div class="header-left">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">Federal Funds Matchmaker</span>
+  </div>
+  <div class="header-center" id="refresh-status">
+    <span id="refresh-label">Loading…</span>
+    <button class="refresh-btn" id="refresh-btn" title="Reload grant data from server" aria-label="Refresh grants">↻ Refresh</button>
+  </div>
+  <div class="header-right">
+        <div class="account-menu" id="account-menu">
+      <button class="account-btn" id="account-btn" aria-haspopup="true" aria-expanded="false">
+        <span id="account-name">NCDOT</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="account-dropdown" id="account-dropdown" role="menu">
+        <div class="account-dropdown-user" id="dropdown-user">Signed in as Demo User</div>
+        <hr class="dropdown-divider">
+        <div class="account-list" id="account-list"></div>
+        <hr class="dropdown-divider">
+        <button class="dropdown-item" id="btn-view-profile">👤 View profile</button>
+        <button class="dropdown-item" id="btn-create-account">＋ Create account</button>
+        <button class="dropdown-item" id="btn-signout">Sign out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ TAGLINE BAR ══════════════ -->
+<div class="tagline-bar">Helping NC government find and win federal funding — AI-assisted, human-decided.</div>
+
+<!-- ══════════════ MAIN TWO-PANEL ══════════════ -->
+<div class="app-layout">
+
+  <!-- ══════ LEFT HALF: Grant Opportunities ══════ -->
+  <div class="grants-half">
+
+  <!-- LEFT PANEL: filters + ranked list -->
+  <aside class="left-panel">
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="filter-row">
+        <label class="filter-label" for="f-confidence">Confidence</label>
+        <select id="f-confidence" class="filter-select">
+          <option value="all">All</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <label class="filter-label" for="f-status">Status</label>
+        <select id="f-status" class="filter-select">
+          <option value="all">All</option>
+          <option value="posted">Posted</option>
+          <option value="forecasted">Forecasted</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <label class="filter-label" for="f-days">Closes Within</label>
+        <input id="f-days" class="filter-input" type="number" min="1" placeholder="days">
+      </div>
+      <div class="filter-row">
+        <label class="filter-label" for="f-eligibility">Eligibility At Least</label>
+        <select id="f-eligibility" class="filter-select">
+          <option value="all">Any</option>
+          <option value="100">100%</option>
+          <option value="90">90%+</option>
+          <option value="80">80%+</option>
+          <option value="50">50%+</option>
+        </select>
+      </div>
+      <div class="filter-row filter-search-row">
+        <input id="f-search" class="filter-input filter-search" type="search" placeholder="🔍 Search title or agency…">
+      </div>
+    </div>
+
+    <!-- Mode badge -->
+    <div id="mode-banner" class="mode-banner hidden"></div>
+    <!-- Sample data banner -->
+    <div id="sample-banner" class="sample-banner hidden">⚠ SAMPLE DATA — not from live Grants.gov feed</div>
+
+    <!-- List header -->
+    <div class="list-header">
+      <span id="list-count">— opportunities</span>
+      <div class="list-sort">
+        <label for="sort-by" class="sr-only">Sort by</label>
+        <select id="sort-by" class="filter-select filter-select-sm">
+          <option value="score">Score ↓</option>
+          <option value="close_date">Due date ↑</option>
+          <option value="undecided">Undecided first</option>
+        </select>
+        <button id="compare-btn" class="compare-btn hidden" title="Compare 2 selected grants">⊟ Compare</button>
+      </div>
+    </div>
+
+    <!-- Opportunity list -->
+    <ol class="opp-list" id="opp-list" role="listbox" aria-label="Ranked opportunities"></ol>
+
+    <!-- Export -->
+    <div class="list-footer">
+      <a id="export-link" href="/api/export?account_id=ncdot" class="btn-export">↓ Export CSV</a>
+    </div>
+
+  </aside>
+
+  <div class="drag-handle drag-handle--inner" id="drag-inner" role="separator" aria-orientation="vertical" title="Drag to resize panels"></div>
+
+  <!-- RIGHT PANEL: detail -->
+  <main class="detail-panel" id="detail-panel" role="main">
+    <div class="detail-empty" id="detail-empty">
+      <div class="detail-empty-icon">◆</div>
+      <p>Select an opportunity from the list to see details.</p>
+    </div>
+    <!-- filled by JS -->
+    <div id="detail-content" class="hidden"></div>
+  </main>
+
+  </div><!-- end .grants-half -->
+
+  <div class="drag-handle drag-handle--outer" id="drag-outer" role="separator" aria-orientation="vertical" title="Drag to resize panels"></div>
+
+  <!-- ══════ RIGHT HALF: Project Match (always visible) ══════ -->
+  <div class="pm-half">
+    <div class="pm-half-header">
+      <span class="pm-half-tab">📄 Project Match</span>
+    </div>
+    <div class="pm-half-body" id="pm-half-body">
+      <!-- Input card -->
+      <div class="pm-input-card">
+        <div class="pm-input-heading">Match Your Project to Grants</div>
+        <div class="pm-input-sub">Upload project documents or paste text. We'll identify your project goals and find the most relevant grants above 80% eligibility &amp; relevance.</div>
+
+        <div class="pm-dropzone" id="pm-dropzone">
+          <div class="pm-drop-inner">
+            <span class="pm-drop-icon">📁</span>
+            <span class="pm-drop-label">Drop files here or <label for="pm-file-input" class="pm-file-link">browse</label></span>
+            <span class="pm-drop-types">PDF, DOCX, XLSX, TXT, MD, PY, CSV</span>
+            <input type="file" id="pm-file-input" multiple accept=".pdf,.doc,.docx,.xlsx,.xls,.txt,.md,.py,.js,.csv" style="display:none">
+          </div>
+          <div id="pm-file-list" class="pm-file-list"></div>
+        </div>
+
+        <div class="pm-or">— or paste text —</div>
+        <textarea id="pm-paste" class="pm-paste" rows="5" placeholder="Paste project description, grant narrative, or strategic plan excerpt…"></textarea>
+
+        <div class="pm-actions">
+          <button id="pm-analyze-btn" class="btn-primary">Analyze &amp; Match Grants</button>
+          <button id="pm-clear-btn" class="btn-secondary">Clear</button>
+        </div>
+        <div id="pm-error" class="pm-error hidden"></div>
+      </div>
+
+      <!-- Results area -->
+      <div id="pm-results">
+        <div class="pm-results-placeholder">
+          <span style="font-size:3rem">🎯</span>
+          <p>Upload your project documents and click <strong>Analyze</strong> to find matching grants.</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- end .pm-half -->
+
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+
+
+<!-- ══════════════ HOW SCORES WORK MODAL ══════════════ -->
+<div id="how-modal" class="how-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="how-modal-title">
+  <div class="how-modal-box">
+    <div class="how-modal-header">
+      <h2 id="how-modal-title">How Federal Funds Matchmaker scores opportunities</h2>
+      <button class="how-modal-close" id="how-modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="how-modal-body">
+      <p class="how-intro">Each grant is ranked by a weighted combination of five signals. Scores are <strong>advisory only</strong> — your team makes the final call.</p>
+      <table class="how-table">
+        <thead><tr><th>Signal</th><th>Weight</th><th>What it measures</th></tr></thead>
+        <tbody>
+          <tr><td>🧠 Semantic relevance</td><td>45%</td><td>Cosine similarity between NCDOT's mission text and the grant synopsis, computed with Azure OpenAI embeddings.</td></tr>
+          <tr><td>🔑 Keyword match</td><td>25%</td><td>TF-IDF overlap between grant text and NCDOT's search seed keywords (bridge, transit, safety, EV, rural access, etc.).</td></tr>
+          <tr><td>✅ Eligibility</td><td>15%</td><td>Rule-based check: does the grant's listed applicant types include state governments? No LLM involved — deterministic logic only.</td></tr>
+          <tr><td>⏱ Timing</td><td>10%</td><td>Proximity to close date. Grants closing within 30–90 days score higher; forecasted grants score lower.</td></tr>
+          <tr><td>🏛 Funder affinity</td><td>5%</td><td>Preference for USDOT, FHWA, FTA, and other historically relevant federal agencies.</td></tr>
+        </tbody>
+      </table>
+      <div class="how-section">
+        <h3>Confidence rating</h3>
+        <p><strong>High</strong> — full synopsis text available; both semantic and keyword signals are reliable.<br>
+        <strong>Medium</strong> — partial text; keyword signal used, semantic may be estimated.<br>
+        <strong>Low</strong> — minimal source text; score is a rough estimate only.</p>
+      </div>
+      <div class="how-section">
+        <h3>Effort estimate</h3>
+        <p>Estimated based on text signals: cost-share requirements, award size ≥ $10M, multi-year scope, consortium/partnership language, and NEPA review mentions. <strong>Not AI-generated</strong> — deterministic rule-based logic.</p>
+      </div>
+      <div class="how-section how-ai-note">
+        <h3>AI use disclosure</h3>
+        <p>Semantic scoring (45%) uses <strong>Azure OpenAI text-embedding-3-small</strong> to compute vector similarity. The optional AI summary (shown in grant details) uses <strong>Azure OpenAI GPT-4.1-mini</strong> to synthesize a plain-English overview from public grant text. <strong>Eligibility verdicts and effort ratings are rule-based and do not use AI.</strong> No grant facts are invented — if information is unavailable, the tool displays "not stated."</p>
+        <p>When AI embeddings are unavailable, the tool falls back to keyword-only scoring and displays a warning banner.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SITE FOOTER ══════════════ -->
+<footer class="site-footer">
+  <div class="footer-left">
+    <span class="footer-source">Source: <a href="https://www.grants.gov" target="_blank" rel="noopener">Grants.gov</a></span>
+  </div>
+  <div class="footer-center">
+    <span class="footer-privacy">No personal data stored · Public grant data</span>
+  </div>
+  <div class="footer-right">
+    <span class="footer-ai">AI-assisted scoring · <a href="#" id="footer-how-link">How it works</a></span>
+  </div>
+</footer>
+
+
+<!-- ══════════════ CREATE ACCOUNT MODAL ══════════════ -->
+<div id="create-acct-modal" class="how-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="create-acct-title">
+  <div class="how-modal-box" style="max-width:420px">
+    <div class="how-modal-header">
+      <h2 id="create-acct-title">Create account</h2>
+      <button class="how-modal-close" id="create-acct-close" aria-label="Close">✕</button>
+    </div>
+    <div class="how-modal-body">
+      <p style="margin-bottom:1rem;color:var(--text-muted)">Create a new department or division profile to track grant decisions separately.</p>
+      <form id="create-acct-form">
+        <div class="form-field">
+          <label class="form-label" for="new-acct-name">Organization name <span class="req">*</span></label>
+          <input class="form-input" id="new-acct-name" type="text" placeholder="e.g. NC Dept of Commerce" required maxlength="80" autocomplete="organization">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="new-acct-type">Type</label>
+          <select class="form-input" id="new-acct-type">
+            <option value="department">Department</option>
+            <option value="division">Division</option>
+            <option value="office">Office</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <p class="form-note">📧 No email confirmation required in demo mode. In production, a verification email would be sent before the account becomes active.</p>
+        <div id="create-acct-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="create-acct-cancel">Cancel</button>
+          <button type="submit" class="btn-primary" id="create-acct-submit">Create account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ ACCOUNT PROFILE MODAL ══════════════ -->
+<div id="profile-modal" class="profile-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+  <div class="profile-modal-box">
+    <div class="profile-modal-header">
+      <h2 id="profile-modal-title">My Profile</h2>
+      <button class="how-modal-close" id="profile-modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="profile-modal-body">
+      <div class="profile-section">
+        <div class="profile-section-title">Grants Being Pursued / Considering</div>
+        <div id="profile-decisions-list"><p class="profile-empty">No grants marked yet.</p></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-section-title">Past Project Searches</div>
+        <div class="profile-search-tags" id="profile-searches">
+          <span class="profile-search-tag" data-search="project1">project1</span>
+          <span class="profile-search-tag" data-search="project2">project2</span>
+          <span class="profile-search-tag" data-search="ncdot">ncdot</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="compare-modal" class="compare-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="compare-modal-title"><div class="compare-modal-box"><div class="compare-modal-header"><h2 id="compare-modal-title">Grant Comparison</h2><button class="how-modal-close" id="compare-modal-close" aria-label="Close">&#x2715;</button></div><div class="compare-modal-body" id="compare-modal-body"></div></div></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
+<!-- This is appended; actual edits replace body content below -->
